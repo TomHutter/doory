@@ -2,6 +2,10 @@
 
 Thank you for choosing Buffalo for your web development needs.
 
+This app was crated with:
+
+    $ buffalo new --ci-provider gitlab-ci --db-type sqlite3 doors
+
 ## Database Setup
 
 It looks like you chose to set up your application using a database! Fantastic!
@@ -15,6 +19,10 @@ You will also need to make sure that **you** start/install the database of your 
 Ok, so you've edited the "database.yml" file and started your database, now Buffalo can create the databases in that file for you:
 
 	$ buffalo pop create -a
+
+or
+
+    $ buffalo pop create -e development
 
 ## Starting the Application
 
@@ -33,3 +41,6 @@ We recommend you heading over to [http://gobuffalo.io](http://gobuffalo.io) and 
 Good luck!
 
 [Powered by Buffalo](http://gobuffalo.io)
+
+buffalo generate resource door room floor building description:nulls.String company:uuid
+buffalo generate resource company name description:nulls.Text contact_person:uuid
