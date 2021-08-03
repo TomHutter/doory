@@ -1,0 +1,9 @@
+create_table("doors") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("room", "string", {})
+	t.Column("floor", "string", {})
+	t.Column("building", "string", {})
+	t.Column("description", "string", {null: true})
+	t.Column("company", "uuid", {})
+	t.Timestamps()
+}

@@ -1,0 +1,6 @@
+- id: "door.created.success"
+  translation: "Door was successfully created."
+- id: "door.updated.success"
+  translation: "Door was successfully updated."
+- id: "door.destroyed.success"
+  translation: "Door was successfully destroyed."
