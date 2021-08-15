@@ -15,7 +15,7 @@
   <tbody>
     <%= for (door) in doors { %>
       <tr>
-        <td class="align-middle"><%= door.Room %></td><td class="align-middle"><%= door.Floor %></td><td class="align-middle"><%= door.Building %></td><td class="align-middle"><%= door.Description %></td><td class="align-middle"><%= door.Company %></td>
+        <td class="align-middle"><%= door.Room %></td><td class="align-middle"><%= door.Floor %></td><td class="align-middle"><%= door.Building %></td><td class="align-middle"><%= door.Description %></td><td class="align-middle"><%= door.Company.Name %></td>
         <td>
           <div class="float-right">
             <%= linkTo(doorPath({ door_id: door.ID }), {class: "btn btn-info", body: "View"}) %>

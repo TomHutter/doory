@@ -4,6 +4,6 @@ create_table("doors") {
 	t.Column("floor", "string", {})
 	t.Column("building", "string", {})
 	t.Column("description", "string", {null: true})
-	t.Column("company", "uuid", {})
+	t.Column("company_id", "uuid", {})
 	t.Timestamps()
 }

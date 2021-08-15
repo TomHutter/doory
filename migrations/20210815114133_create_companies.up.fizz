@@ -1,0 +1,7 @@
+create_table("companies") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("name", "string", {})
+	t.Column("description", "text", {null: true})
+	t.Column("contact_person_id", "uuid", {})
+	t.Timestamps()
+}

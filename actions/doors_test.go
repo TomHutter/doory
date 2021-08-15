@@ -3,6 +3,7 @@ package actions
 import (
 	"doors/models"
 	"fmt"
+	"log"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/gofrs/uuid"
@@ -31,21 +32,23 @@ func (as *ActionSuite) Test_DoorsResource_Show() {
 }
 
 func (as *ActionSuite) Test_DoorsResource_Create() {
+	as.LoadFixture("have some companies")
 	id, _ := uuid.NewV1()
-	company, _ := uuid.NewV1()
+	companyID, _ := uuid.FromString("937af041-43ba-45d0-87a1-6bb173011996")
+	log.Printf("companyID: %v", companyID)
 	door := &models.Door{
 		ID:          id,
 		Room:        "#3",
 		Floor:       "#3",
 		Building:    "#3",
 		Description: nulls.NewString("Door won't budge"),
-		Company:     company,
+		CompanyID:   companyID,
 	}
 	res := as.HTML("/doors").Post(door)
 	as.Equal(303, res.Code)
 	as.Equal(fmt.Sprintf("/doors/%s", door.ID), res.Location())
 
-	err := as.DB.First(door)
+	err := as.DB.Eager().First(door)
 	as.NoError(err)
 	as.NotZero(door.ID)
 	as.NotZero(door.CreatedAt)
@@ -58,8 +61,8 @@ func (as *ActionSuite) Test_DoorsResource_Create() {
 
 func (as *ActionSuite) Test_DoorsResource_Create_Errors() {
 	door := &models.Door{
-		ID:      uuid.UUID{},
-		Company: uuid.UUID{},
+		ID:        uuid.UUID{},
+		CompanyID: uuid.UUID{},
 	}
 	res := as.HTML("/doors").Post(door)
 	as.Equal(422, res.Code)

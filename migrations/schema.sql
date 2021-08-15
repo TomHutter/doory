@@ -8,7 +8,15 @@ CREATE TABLE IF NOT EXISTS "doors" (
 "floor" TEXT NOT NULL,
 "building" TEXT NOT NULL,
 "description" TEXT,
-"company" char(36) NOT NULL,
+"company_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "companies" (
+"id" TEXT PRIMARY KEY,
+"name" TEXT NOT NULL,
+"description" TEXT,
+"contact_person_id" char(36) NOT NULL,
 "created_at" DATETIME NOT NULL,
 "updated_at" DATETIME NOT NULL
 );

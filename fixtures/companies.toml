@@ -1,0 +1,21 @@
+[[scenario]]
+name = "have some companies"
+
+  [[scenario.table]]
+    name = "companies"
+
+    [[scenario.table.row]]
+      id = "937af041-43ba-45d0-87a1-6bb173011996"
+      name = "Company #1"
+      contact_person_id = "4edb21a7-fe0c-11eb-97ee-0242ac1f0002"
+      description = "Description for company #1"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "33e166d8-ee6f-4017-8e16-cd0742f4e0e2"
+      name = "Company #2"
+      contact_person_id = "7da15784-fe0c-11eb-869c-0242ac1f0002"
+      description = "Description for company #2"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

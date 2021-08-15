@@ -5,20 +5,22 @@ import (
 	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
+	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
 	"time"
-	"github.com/gobuffalo/validate/v3/validators"
 )
+
 // Door is used by pop to map your doors database table to your go code.
 type Door struct {
-    ID uuid.UUID `json:"id" db:"id"`
-    Room string `json:"room" db:"room"`
-    Floor string `json:"floor" db:"floor"`
-    Building string `json:"building" db:"building"`
-    Description nulls.String `json:"description" db:"description"`
-    Company uuid.UUID `json:"company" db:"company"`
-    CreatedAt time.Time `json:"created_at" db:"created_at"`
-    UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID          uuid.UUID    `json:"id" db:"id"`
+	Room        string       `json:"room" db:"room"`
+	Floor       string       `json:"floor" db:"floor"`
+	Building    string       `json:"building" db:"building"`
+	Description nulls.String `json:"description" db:"description"`
+	CompanyID   uuid.UUID    `json:"-" db:"company_id"`
+	Company     Company      `json:"company,omitempty" belongs_to:"company"`
+	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted
@@ -56,4 +58,14 @@ func (d *Door) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 // This method is not required and may be deleted.
 func (d *Door) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
+}
+
+// Implement the Selectable interface type which provides two behaviours SelectValue and SelectLabel.
+// This will allow any list of Companies fetched from the database to be used in the <select> options.
+//func (d Door) SelectLabel() string {
+//	return d.Name
+//}
+
+func (d Door) SelectValue() interface{} {
+	return d.ID
 }

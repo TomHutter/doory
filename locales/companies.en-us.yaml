@@ -1,0 +1,6 @@
+- id: "company.created.success"
+  translation: "Company was successfully created."
+- id: "company.updated.success"
+  translation: "Company was successfully updated."
+- id: "company.destroyed.success"
+  translation: "Company was successfully destroyed."
