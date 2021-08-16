@@ -1,6 +1,6 @@
 <%= f.InputTag("Room") %>
-<%= f.InputTag("Floor") %>
-<%= f.InputTag("Building") %>
+<%= f.SelectTag("Floor", {options: ["Erdgeschoss", "1. Stock", "2. Stock"]}) %>
+<%= f.SelectTag("Building", {options: ["IT Campus 1"]}) %>
 <%= f.SelectTag("CompanyID", {"label": "Company", options: companies, value: door.CompanyID}) %>
 <%= f.TextAreaTag("Description", {rows: 5}) %>
 <button class="btn btn-success" role="submit">Save</button>
