@@ -15,8 +15,8 @@
   <tbody>
     <%= for (company) in companies { %>
       <tr>
-        <%= if (company.Person) { %>
-        <td class="align-middle"><%= company.Name %></td><td class="align-middle"><%= company.Person.Name %> <%= company.Person.Surname %></td>
+        <%= if (company.ContactPerson) { %>
+        <td class="align-middle"><%= company.Name %></td><td class="align-middle"><%= company.ContactPerson.Name %> <%= company.ContactPerson.Surname %></td>
         <% } else { %>
         <td class="align-middle"><%= company.Name %></td><td class="align-middle"></td>
         <% } %>
