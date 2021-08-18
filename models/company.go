@@ -12,14 +12,14 @@ import (
 
 // Company is used by pop to map your companies database table to your go code.
 type Company struct {
-	ID              uuid.UUID    `json:"id" db:"id"`
-	Name            string       `json:"name" db:"name"`
-	Description     nulls.String `json:"description" db:"description"`
-	ContactPersonID uuid.UUID    `json:"-" db:"contact_person_id"`
-	//ContactPerson   ContactPerson    `json:"contact_person" db:"contact_person"`
-	Doors     []Door    `json:"doors,omitempty" has_many:"doors" order_by:"name desc"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID          uuid.UUID    `json:"id" db:"id"`
+	Name        string       `json:"name" db:"name"`
+	Description nulls.String `json:"description" db:"description"`
+	PersonID    uuid.UUID    `json:"-" db:"contact_person_id"`
+	Person      *Person      `json:"contact_person,omitempty" belongs_to:"person""`
+	Doors       []Door       `json:"doors,omitempty" has_many:"doors" order_by:"room desc"`
+	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted

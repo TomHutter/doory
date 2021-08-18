@@ -63,6 +63,7 @@ func App() *buffalo.App {
 
 		app.Resource("/doors", DoorsResource{})
 		app.Resource("/companies", CompaniesResource{})
+		app.Resource("/people", PeopleResource{})
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

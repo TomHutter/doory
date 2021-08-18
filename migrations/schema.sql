@@ -20,3 +20,14 @@ CREATE TABLE IF NOT EXISTS "companies" (
 "created_at" DATETIME NOT NULL,
 "updated_at" DATETIME NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "people" (
+"id" TEXT PRIMARY KEY,
+"name" TEXT NOT NULL,
+"surname" TEXT NOT NULL,
+"company_id" char(36) NOT NULL,
+"email" TEXT NOT NULL,
+"phone" TEXT NOT NULL,
+"id_number" TEXT NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);

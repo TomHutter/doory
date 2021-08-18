@@ -15,7 +15,11 @@
   <tbody>
     <%= for (company) in companies { %>
       <tr>
-        <td class="align-middle"><%= company.Name %></td><td class="align-middle"><--%= company.ContactPerson %--></td>
+        <%= if (company.Person) { %>
+        <td class="align-middle"><%= company.Name %></td><td class="align-middle"><%= company.Person.Name %> <%= company.Person.Surname %></td>
+        <% } else { %>
+        <td class="align-middle"><%= company.Name %></td><td class="align-middle"></td>
+        <% } %>
         <td>
           <div class="float-right">
             <%= linkTo(companyPath({ company_id: company.ID }), {class: "btn btn-info", body: "View"}) %>

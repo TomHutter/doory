@@ -1,0 +1,33 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">People</h3>
+  <div class="float-right">
+    <%= linkTo(newPeoplePath(), {class: "btn btn-primary"}) { %>
+      Create New Person
+    <% } %>
+  </div>
+</div>
+
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    <th>Name</th><th>Surname</th><th>CompanyID</th><th>Email</th><th>Phone</th><th>IDNumber</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (person) in people { %>
+      <tr>
+        <td class="align-middle"><%= person.Name %></td><td class="align-middle"><%= person.Surname %></td><td class="align-middle"><%= person.Company.Name %></td><td class="align-middle"><%= person.Email %></td><td class="align-middle"><%= person.Phone %></td><td class="align-middle"><%= person.IDNumber %></td>
+        <td>
+          <div class="float-right">
+            <%= linkTo(personPath({ person_id: person.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editPersonPath({ person_id: person.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(personPath({ person_id: person.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

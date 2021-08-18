@@ -15,34 +15,34 @@ import (
 // edit this file.
 
 // Following naming logic is implemented in Buffalo:
-// Model: Singular (Door)
-// DB Table: Plural (doors)
-// Resource: Plural (Doors)
-// Path: Plural (/doors)
-// View Template Folder: Plural (/templates/doors/)
+// Model: Singular (Person)
+// DB Table: Plural (people)
+// Resource: Plural (People)
+// Path: Plural (/people)
+// View Template Folder: Plural (/templates/people/)
 
-// DoorsResource is the resource for the Door model
-type DoorsResource struct {
+// PeopleResource is the resource for the Person model
+type PeopleResource struct {
 	buffalo.Resource
 }
 
-// List gets all Doors. This function is mapped to the path
-// GET /doors
-func (v DoorsResource) List(c buffalo.Context) error {
+// List gets all People. This function is mapped to the path
+// GET /people
+func (v PeopleResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
 
-	doors := &models.Doors{}
+	people := &models.People{}
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
 	q := tx.PaginateFromParams(c.Params())
 
-	// Retrieve all Doors from the DB
-	if err := q.Eager().All(doors); err != nil {
+	// Retrieve all People from the DB
+	if err := q.Eager().All(people); err != nil {
 		return err
 	}
 
@@ -50,61 +50,61 @@ func (v DoorsResource) List(c buffalo.Context) error {
 		// Add the paginator to the context so it can be used in the template.
 		c.Set("pagination", q.Paginator)
 
-		c.Set("doors", doors)
-		return c.Render(http.StatusOK, r.HTML("/doors/index.plush.html"))
+		c.Set("people", people)
+		return c.Render(http.StatusOK, r.HTML("/people/index.plush.html"))
 	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(200, r.JSON(doors))
+		return c.Render(200, r.JSON(people))
 	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(doors))
+		return c.Render(200, r.XML(people))
 	}).Respond(c)
 }
 
-// Show gets the data for one Door. This function is mapped to
-// the path GET /doors/{door_id}
-func (v DoorsResource) Show(c buffalo.Context) error {
+// Show gets the data for one Person. This function is mapped to
+// the path GET /people/{person_id}
+func (v PeopleResource) Show(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
 
-	// Allocate an empty Door
-	door := &models.Door{}
+	// Allocate an empty Person
+	person := &models.Person{}
 
-	// To find the Door the parameter door_id is used.
-	if err := tx.Eager().Find(door, c.Param("door_id")); err != nil {
+	// To find the Person the parameter person_id is used.
+	if err := tx.Eager().Find(person, c.Param("person_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
 	return responder.Wants("html", func(c buffalo.Context) error {
-		c.Set("door", door)
+		c.Set("person", person)
 
-		return c.Render(http.StatusOK, r.HTML("/doors/show.plush.html"))
+		return c.Render(http.StatusOK, r.HTML("/people/show.plush.html"))
 	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(200, r.JSON(door))
+		return c.Render(200, r.JSON(person))
 	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(door))
+		return c.Render(200, r.XML(person))
 	}).Respond(c)
 }
 
-// New renders the form for creating a new Door.
-// This function is mapped to the path GET /doors/new
-func (v DoorsResource) New(c buffalo.Context) error {
-	c.Set("door", &models.Door{})
+// New renders the form for creating a new Person.
+// This function is mapped to the path GET /people/new
+func (v PeopleResource) New(c buffalo.Context) error {
+	c.Set("person", &models.Person{})
 
 	set_companies(c)
 
-	return c.Render(http.StatusOK, r.HTML("/doors/new.plush.html"))
+	return c.Render(http.StatusOK, r.HTML("/people/new.plush.html"))
 }
 
-// Create adds a Door to the DB. This function is mapped to the
-// path POST /doors
-func (v DoorsResource) Create(c buffalo.Context) error {
-	// Allocate an empty Door
-	door := &models.Door{}
+// Create adds a Person to the DB. This function is mapped to the
+// path POST /people
+func (v PeopleResource) Create(c buffalo.Context) error {
+	// Allocate an empty Person
+	person := &models.Person{}
 
-	// Bind door to the html form elements
-	if err := c.Bind(door); err != nil {
+	// Bind person to the html form elements
+	if err := c.Bind(person); err != nil {
 		return err
 	}
 
@@ -117,7 +117,7 @@ func (v DoorsResource) Create(c buffalo.Context) error {
 	set_companies(c)
 
 	// Validate the data from the html form
-	verrs, err := tx.ValidateAndCreate(door)
+	verrs, err := tx.ValidateAndCreate(person)
 	if err != nil {
 		return err
 	}
@@ -129,9 +129,9 @@ func (v DoorsResource) Create(c buffalo.Context) error {
 
 			// Render again the new.html template that the user can
 			// correct the input.
-			c.Set("door", door)
+			c.Set("person", person)
 
-			return c.Render(http.StatusUnprocessableEntity, r.HTML("/doors/new.plush.html"))
+			return c.Render(http.StatusUnprocessableEntity, r.HTML("/people/new.plush.html"))
 		}).Wants("json", func(c buffalo.Context) error {
 			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
 		}).Wants("xml", func(c buffalo.Context) error {
@@ -141,62 +141,62 @@ func (v DoorsResource) Create(c buffalo.Context) error {
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "door.created.success"))
+		c.Flash().Add("success", T.Translate(c, "person.created.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/doors/%v", door.ID)
+		return c.Redirect(http.StatusSeeOther, "/people/%v", person.ID)
 	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusCreated, r.JSON(door))
+		return c.Render(http.StatusCreated, r.JSON(person))
 	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusCreated, r.XML(door))
+		return c.Render(http.StatusCreated, r.XML(person))
 	}).Respond(c)
 }
 
-// Edit renders a edit form for a Door. This function is
-// mapped to the path GET /doors/{door_id}/edit
-func (v DoorsResource) Edit(c buffalo.Context) error {
+// Edit renders a edit form for a Person. This function is
+// mapped to the path GET /people/{person_id}/edit
+func (v PeopleResource) Edit(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
 
-	// Allocate an empty Door
-	door := &models.Door{}
+	// Allocate an empty Person
+	person := &models.Person{}
 
-	if err := tx.Eager().Find(door, c.Param("door_id")); err != nil {
+	if err := tx.Find(person, c.Param("person_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	c.Set("door", door)
+	c.Set("person", person)
 
 	set_companies(c)
 
-	return c.Render(http.StatusOK, r.HTML("/doors/edit.plush.html"))
+	return c.Render(http.StatusOK, r.HTML("/people/edit.plush.html"))
 }
 
-// Update changes a Door in the DB. This function is mapped to
-// the path PUT /doors/{door_id}
-func (v DoorsResource) Update(c buffalo.Context) error {
+// Update changes a Person in the DB. This function is mapped to
+// the path PUT /people/{person_id}
+func (v PeopleResource) Update(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
 
-	// Allocate an empty Door
-	door := &models.Door{}
+	// Allocate an empty Person
+	person := &models.Person{}
 
-	if err := tx.Find(door, c.Param("door_id")); err != nil {
+	if err := tx.Find(person, c.Param("person_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	// Bind Door to the html form elements
-	if err := c.Bind(door); err != nil {
+	// Bind Person to the html form elements
+	if err := c.Bind(person); err != nil {
 		return err
 	}
 
-	verrs, err := tx.ValidateAndUpdate(door)
+	verrs, err := tx.ValidateAndUpdate(person)
 	if err != nil {
 		return err
 	}
@@ -208,9 +208,9 @@ func (v DoorsResource) Update(c buffalo.Context) error {
 
 			// Render again the edit.html template that the user can
 			// correct the input.
-			c.Set("door", door)
+			c.Set("person", person)
 
-			return c.Render(http.StatusUnprocessableEntity, r.HTML("/doors/edit.plush.html"))
+			return c.Render(http.StatusUnprocessableEntity, r.HTML("/people/edit.plush.html"))
 		}).Wants("json", func(c buffalo.Context) error {
 			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
 		}).Wants("xml", func(c buffalo.Context) error {
@@ -220,47 +220,47 @@ func (v DoorsResource) Update(c buffalo.Context) error {
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "door.updated.success"))
+		c.Flash().Add("success", T.Translate(c, "person.updated.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/doors/%v", door.ID)
+		return c.Redirect(http.StatusSeeOther, "/people/%v", person.ID)
 	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.JSON(door))
+		return c.Render(http.StatusOK, r.JSON(person))
 	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.XML(door))
+		return c.Render(http.StatusOK, r.XML(person))
 	}).Respond(c)
 }
 
-// Destroy deletes a Door from the DB. This function is mapped
-// to the path DELETE /doors/{door_id}
-func (v DoorsResource) Destroy(c buffalo.Context) error {
+// Destroy deletes a Person from the DB. This function is mapped
+// to the path DELETE /people/{person_id}
+func (v PeopleResource) Destroy(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
 	}
 
-	// Allocate an empty Door
-	door := &models.Door{}
+	// Allocate an empty Person
+	person := &models.Person{}
 
-	// To find the Door the parameter door_id is used.
-	if err := tx.Find(door, c.Param("door_id")); err != nil {
+	// To find the Person the parameter person_id is used.
+	if err := tx.Find(person, c.Param("person_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	if err := tx.Destroy(door); err != nil {
+	if err := tx.Destroy(person); err != nil {
 		return err
 	}
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a flash message
-		c.Flash().Add("success", T.Translate(c, "door.destroyed.success"))
+		c.Flash().Add("success", T.Translate(c, "person.destroyed.success"))
 
 		// Redirect to the index page
-		return c.Redirect(http.StatusSeeOther, "/doors")
+		return c.Redirect(http.StatusSeeOther, "/people")
 	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.JSON(door))
+		return c.Render(http.StatusOK, r.JSON(person))
 	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(http.StatusOK, r.XML(door))
+		return c.Render(http.StatusOK, r.XML(person))
 	}).Respond(c)
 }

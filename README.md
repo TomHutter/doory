@@ -42,5 +42,6 @@ Good luck!
 
 [Powered by Buffalo](http://gobuffalo.io)
 
-buffalo generate resource door room floor building description:nulls.String company:uuid
+buffalo generate resource door room floor building description:nulls.Text company:uuid
 buffalo generate resource company name description:nulls.Text contact_person:uuid
+buffalo generate resource person name surname company_id:uuid email phone id_number

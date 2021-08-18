@@ -31,7 +31,11 @@
 
   <li class="list-group-item pb-1">
     <label class="small d-block">ContactPerson</label>
-    <p class="d-inline-block"><--%= company.ContactPerson %--></p>
+    <%= if (company.Person) { %>
+    <p class="d-inline-block"><%= company.Person.Name %> <%= company.Person.Surname %></p>
+    <% } else { %>
+    <p class="d-inline-block"></p>
+    <% } %>
   </li>
 
 
