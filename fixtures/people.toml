@@ -1,0 +1,49 @@
+[[scenario]]
+name = "have some people"
+
+  [[scenario.table]]
+    name = "people"
+
+    [[scenario.table.row]]
+      id = "bd42798a-77cb-440c-9595-ec166fd3c32d"
+      name = "Luke"
+      surname = "Skywalker"
+      email = "luke.skywalker@tatooine.com"
+      phone = "11223344"
+      company_id = "937af041-43ba-45d0-87a1-6bb173011996"
+      id_number = "lsk"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "7a3c67b4-078a-4bf2-9635-d9cde35bb7a3"
+      name = "Leia"
+      surname = "Organa"
+      email = "leia.organa@alderaan.com"
+      phone = "55667788"
+      company_id = "937af041-43ba-45d0-87a1-6bb173011996"
+      id_number = "lor"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "f2af5dc1-cdac-4dc1-b425-9c419ea37e5f"
+      name = "Obi Wan"
+      surname = "Kenobi"
+      email = "ben.kenobi@tatooine.com"
+      phone = "11223456"
+      company_id = "33e166d8-ee6f-4017-8e16-cd0742f4e0e2"
+      id_number = "oke"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "1fdcade4-cb41-4780-a710-9d7e92d82a69"
+      name = "Han"
+      surname = "Solo"
+      email = "han.solo@corellia.com"
+      phone = "99101020"
+      company_id = "33e166d8-ee6f-4017-8e16-cd0742f4e0e2"
+      id_number = "hso"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

@@ -3,7 +3,6 @@ package actions
 import (
 	"doors/models"
 	"fmt"
-	"log"
 
 	"github.com/gobuffalo/nulls"
 	"github.com/gofrs/uuid"
@@ -33,9 +32,8 @@ func (as *ActionSuite) Test_DoorsResource_Show() {
 
 func (as *ActionSuite) Test_DoorsResource_Create() {
 	as.LoadFixture("have some companies")
-	id, _ := uuid.NewV1()
+	id, _ := uuid.NewV4()
 	companyID, _ := uuid.FromString("937af041-43ba-45d0-87a1-6bb173011996")
-	log.Printf("companyID: %v", companyID)
 	door := &models.Door{
 		ID:          id,
 		Room:        "#3",

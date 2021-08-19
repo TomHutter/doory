@@ -32,7 +32,7 @@ func (as *ActionSuite) Test_CompaniesResource_Show() {
 
 func (as *ActionSuite) Test_CompaniesResource_Create() {
 	//as.LoadFixture("have some companies")
-	id, _ := uuid.NewV1()
+	id, _ := uuid.NewV4()
 	cpID, _ := uuid.FromString("4edb21a7-fe0c-11eb-97ee-0242ac1f0002")
 	company := &models.Company{
 		ID:              id,
