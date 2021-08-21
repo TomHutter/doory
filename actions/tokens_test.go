@@ -2,7 +2,6 @@ package actions
 
 import (
 	"doors/models"
-	"fmt"
 
 	"github.com/gofrs/uuid"
 )
