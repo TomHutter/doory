@@ -1,0 +1,33 @@
+[[scenario]]
+name = "have some tokens"
+
+  [[scenario.table]]
+    name = "tokens"
+
+    [[scenario.table.row]]
+      id = "3eb3735a-4ac1-44fc-9154-46fe073fb394"
+      person_id = "bd42798a-77cb-440c-9595-ec166fd3c32d"
+      token_id = "Token#1"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "a68ec5fb-a829-46f5-81d5-5c39ee399239"
+      person_id = "bd42798a-77cb-440c-9595-ec166fd3c32d"
+      token_id = "Token#2"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "c6f3d638-69d8-417b-817c-3c9f9f0d3bf3"
+      person_id = "f2af5dc1-cdac-4dc1-b425-9c419ea37e5f"
+      token_id = "Token#3"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "dce65246-8dd0-432c-9587-67339ae897df"
+      person_id = "1fdcade4-cb41-4780-a710-9d7e92d82a69"
+      token_id = "Token#4"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

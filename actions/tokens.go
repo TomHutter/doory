@@ -29,39 +29,12 @@ type TokensResource struct {
 // List gets all Tokens. This function is mapped to the path
 // GET /tokens
 func (v TokensResource) List(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return fmt.Errorf("no transaction found")
+	c.Flash().Add("warning", "List not implemented")
+
+	if c.Param("person_id") != "" {
+		return c.Redirect(302, "/people/%s", c.Param("person_id"))
 	}
-
-	// To find the Person the parameter person_id is used.
-	if err := set_person(c); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
-	tokens := &models.Tokens{}
-
-	// Paginate results. Params "page" and "per_page" control pagination.
-	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
-
-	// Retrieve all Tokens from the DB
-	if err := q.Order("token_id").Where("person_id in (?)", c.Param("person_id")).All(tokens); err != nil {
-		return err
-	}
-
-	return responder.Wants("html", func(c buffalo.Context) error {
-		// Add the paginator to the context so it can be used in the template.
-		c.Set("pagination", q.Paginator)
-
-		c.Set("tokens", tokens)
-		return c.Render(http.StatusOK, r.HTML("/tokens/index.plush.html"))
-	}).Wants("json", func(c buffalo.Context) error {
-		return c.Render(200, r.JSON(tokens))
-	}).Wants("xml", func(c buffalo.Context) error {
-		return c.Render(200, r.XML(tokens))
-	}).Respond(c)
+	return c.Redirect(302, "/people/")
 }
 
 // Show gets the data for one Token. This function is mapped to
@@ -73,7 +46,6 @@ func (v TokensResource) Show(c buffalo.Context) error {
 		return c.Redirect(302, "/people/%s", c.Param("person_id"))
 	}
 	return c.Redirect(302, "/people/")
-
 }
 
 // New renders the form for creating a new Token.
@@ -121,6 +93,11 @@ func (v TokensResource) Create(c buffalo.Context) error {
 			// correct the input.
 			c.Set("token", token)
 
+			// To find the Person the parameter person_id is used.
+			if err := set_person(c); err != nil {
+				return c.Error(http.StatusNotFound, err)
+			}
+
 			return c.Render(http.StatusUnprocessableEntity, r.HTML("/tokens/new.plush.html"))
 		}).Wants("json", func(c buffalo.Context) error {
 			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
@@ -149,6 +126,11 @@ func (v TokensResource) Edit(c buffalo.Context) error {
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return fmt.Errorf("no transaction found")
+	}
+
+	// To find the Person the parameter person_id is used.
+	if err := set_person(c); err != nil {
+		return c.Error(http.StatusNotFound, err)
 	}
 
 	// Allocate an empty Token
@@ -210,7 +192,12 @@ func (v TokensResource) Update(c buffalo.Context) error {
 		c.Flash().Add("success", T.Translate(c, "token.updated.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/tokens/%v", token.ID)
+		if c.Param("Redirect") == "index" {
+			return c.Redirect(http.StatusSeeOther, "/people/")
+		} else {
+			return c.Redirect(http.StatusSeeOther, "/people/%v", c.Param("person_id"))
+		}
+
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusOK, r.JSON(token))
 	}).Wants("xml", func(c buffalo.Context) error {
