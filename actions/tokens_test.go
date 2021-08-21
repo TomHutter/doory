@@ -84,7 +84,7 @@ func (as *ActionSuite) Test_TokensResource_Update() {
 
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s", token.ID).Put(token)
 	as.Equal(303, res.Code)
-	as.Equal(fmt.Sprintf("/people/bd42798a-77cb-440c-9595-ec166fd3c32d"), res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
 
 	err = as.DB.Reload(token)
 	as.NoError(err)
