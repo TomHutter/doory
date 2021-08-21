@@ -135,7 +135,12 @@ func (v PeopleResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Person.
 // This function is mapped to the path GET /people/new
 func (v PeopleResource) New(c buffalo.Context) error {
-	c.Set("person", &models.Person{})
+	// Allocate an empty Person
+	person := &models.Person{}
+
+	person.IsActive = true
+
+	c.Set("person", person)
 
 	set_companies(c)
 
