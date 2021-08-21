@@ -20,6 +20,8 @@ type Person struct {
 	Email     string    `json:"email" db:"email"`
 	Phone     string    `json:"phone" db:"phone"`
 	IDNumber  string    `json:"id_number" db:"id_number"`
+	IsActive  bool      `json:"is_active" db:"is_active"`
+	Alarm     bool      `json:"alarm" db:"alarm"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }

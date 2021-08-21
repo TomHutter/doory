@@ -40,3 +40,22 @@ func set_people(c buffalo.Context, company *models.Company) error {
 	c.Set("people", people)
 	return nil
 }
+
+func set_person(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return fmt.Errorf("no transaction found")
+	}
+
+	// Allocate an empty Person
+	person := &models.Person{}
+
+	// To find the Person the parameter person_id is used.
+	if err := tx.Find(person, c.Param("person_id")); err != nil {
+		return err
+	}
+
+	c.Set("person", person)
+	return nil
+}

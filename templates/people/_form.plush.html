@@ -1,7 +1,9 @@
+<%= f.CheckboxTag("IsActive") %>
 <%= f.InputTag("Name") %>
 <%= f.InputTag("Surname") %>
 <%= f.SelectTag("CompanyID", {"label": "Company", options: companies, value: person.CompanyID}) %>
 <%= f.InputTag("Email") %>
 <%= f.InputTag("Phone") %>
 <%= f.InputTag("IDNumber") %>
+<%= f.CheckboxTag("Alarm") %>
 <button class="btn btn-success" role="submit">Save</button>

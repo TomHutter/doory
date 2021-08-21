@@ -1,0 +1,6 @@
+create_table("tokens") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("token_id", "string", {})
+	t.Column("person_id", "uuid", {})
+	t.Timestamps()
+}

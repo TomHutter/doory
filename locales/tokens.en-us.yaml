@@ -1,0 +1,6 @@
+- id: "token.created.success"
+  translation: "Token was successfully created."
+- id: "token.updated.success"
+  translation: "Token was successfully updated."
+- id: "token.destroyed.success"
+  translation: "Token was successfully destroyed."

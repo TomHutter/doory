@@ -45,3 +45,4 @@ Good luck!
 buffalo generate resource door room floor building description:nulls.Text company:uuid
 buffalo generate resource company name description:nulls.Text contact_person:uuid
 buffalo generate resource person name surname company_id:uuid email phone id_number
+buffalo generate resource token token_id person_id:uuid

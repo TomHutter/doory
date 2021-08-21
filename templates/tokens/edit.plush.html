@@ -1,0 +1,8 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Edit Token</h3>
+</div>
+
+<%= formFor(token, {action: tokenPath({ token_id: token.ID }), method: "PUT"}) { %>
+  <%= partial("tokens/form.html") %>
+  <%= linkTo(tokenPath({ token_id: token.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>

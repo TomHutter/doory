@@ -1,0 +1,2 @@
+drop_column("people", "is_active")
+drop_column("people", "alarm")

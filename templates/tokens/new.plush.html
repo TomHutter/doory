@@ -1,0 +1,8 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">New Token for <%= person.Name %> <%= person.Surname %></h3>
+</div>
+
+<%= formFor(token, {action: personTokensPath({ person_id: person.ID }), method: "POST"}) { %>
+  <%= partial("tokens/form.html") %>
+  <%= linkTo(personPath({ person_id: person.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>

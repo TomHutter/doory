@@ -30,4 +30,11 @@ CREATE TABLE IF NOT EXISTS "people" (
 "id_number" TEXT NOT NULL,
 "created_at" DATETIME NOT NULL,
 "updated_at" DATETIME NOT NULL
+, "is_active" bool NOT NULL DEFAULT 'true', "alarm" bool NOT NULL DEFAULT 'false');
+CREATE TABLE IF NOT EXISTS "tokens" (
+"id" TEXT PRIMARY KEY,
+"token_id" TEXT NOT NULL,
+"person_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
 );
