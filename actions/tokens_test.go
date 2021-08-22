@@ -70,6 +70,37 @@ func (as *ActionSuite) Test_TokensResource_Create_Errors() {
 	as.Equal(0, c)
 }
 
+// Create duplicate Token with same TokenID leads to redirect_edit
+
+func (as *ActionSuite) Test_TokensResource_Create_Duplicates() {
+	as.LoadFixture("have some people")
+	id, _ := uuid.NewV4()
+	pID, _ := uuid.FromString("bd42798a-77cb-440c-9595-ec166fd3c32d")
+	token := &models.Token{
+		ID:       id,
+		PersonID: pID,
+		TokenID:  "abcdef",
+	}
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
+	as.Equal(303, res.Code)
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+
+	err := as.DB.First(token)
+	as.NoError(err)
+	as.NotZero(token.ID)
+	as.NotZero(token.PersonID)
+
+	id, _ = uuid.NewV4()
+	token = &models.Token{
+		ID:       id,
+		PersonID: pID,
+		TokenID:  "abcdef",
+	}
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
+	as.Equal(422, res.Code)
+	as.Contains(res.Body.String(), "TokenID \"abcdef\" is already in use")
+}
+
 func (as *ActionSuite) Test_TokensResource_Update() {
 	as.LoadFixture("have some people")
 	as.LoadFixture("have some tokens")
