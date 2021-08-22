@@ -6,10 +6,6 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-// TODO:
-// ajax put => index / show
-// unique constraint token_id
-
 func (as *ActionSuite) Test_TokensResource_List() {
 	as.LoadFixture("have some people")
 	as.LoadFixture("have some tokens")

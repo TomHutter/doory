@@ -12,6 +12,8 @@ name = "have some people"
       phone = "11223344"
       company_id = "937af041-43ba-45d0-87a1-6bb173011996"
       id_number = "lsk"
+      is_active = true
+      alarm = false
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
 
@@ -23,6 +25,8 @@ name = "have some people"
       phone = "55667788"
       company_id = "937af041-43ba-45d0-87a1-6bb173011996"
       id_number = "lor"
+      is_active = true
+      alarm = false
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
 
@@ -34,6 +38,8 @@ name = "have some people"
       phone = "11223456"
       company_id = "33e166d8-ee6f-4017-8e16-cd0742f4e0e2"
       id_number = "oke"
+      is_active = true
+      alarm = true
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
 
@@ -45,5 +51,7 @@ name = "have some people"
       phone = "99101020"
       company_id = "33e166d8-ee6f-4017-8e16-cd0742f4e0e2"
       id_number = "hso"
+      is_active = true
+      alarm = false
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"

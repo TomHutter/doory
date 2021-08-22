@@ -89,6 +89,36 @@ func (as *ActionSuite) Test_PeopleResource_Update() {
 	as.Equal("99999999", person.Phone)
 }
 
+// Update PeopleResource and set Redirect to "index"
+// Response should redirect to /people
+func (as *ActionSuite) Test_PeopleResource_Update_List_View() {
+	as.LoadFixture("have some people")
+	person := &models.Person{}
+	err := as.DB.First(person)
+	as.NoError(err)
+	as.NotZero(person.ID)
+	as.NotZero(person.CreatedAt)
+	as.True(person.IsActive)
+	as.False(person.Alarm)
+
+	// Person is used by pop to map your people database table to your go code.
+	type Person struct {
+		ID       uuid.UUID
+		IsActive bool
+		Redirect string
+	}
+
+	p := Person{person.ID, false, "index"}
+
+	res := as.HTML("/people/%s", person.ID).Put(p)
+	as.Equal(303, res.Code)
+	as.Equal("/people/", res.Location())
+
+	err = as.DB.Reload(person)
+	as.NoError(err)
+	as.Equal(false, person.IsActive)
+}
+
 func (as *ActionSuite) Test_PeopleResource_Destroy() {
 	as.LoadFixture("have some people")
 	person := &models.Person{}
