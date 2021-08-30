@@ -1,0 +1,8 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">New AccessGroup</h3>
+</div>
+
+<%= formFor(accessGroup, {action: accessGroupsPath(), method: "POST"}) { %>
+  <%= partial("access_groups/form.html") %>
+  <%= linkTo(accessGroupsPath(), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>

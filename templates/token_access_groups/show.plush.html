@@ -1,0 +1,31 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">TokenAccessGroup Details</h3>
+
+  <div class="float-right">
+    <%= linkTo(tokenAccessGroupsPath(), {class: "btn btn-info"}) { %>
+      Back to all TokenAccessGroups
+    <% } %>
+    <%= linkTo(editTokenAccessGroupPath({ token_access_group_id: tokenAccessGroup.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(tokenAccessGroupPath({ token_access_group_id: tokenAccessGroup.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">TokenID</label>
+    <p class="d-inline-block"><%= tokenAccessGroup.TokenID %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">AccessGroupID</label>
+    <p class="d-inline-block"><%= tokenAccessGroup.AccessGroupID %></p>
+  </li>
+
+
+</ul>

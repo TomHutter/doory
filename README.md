@@ -47,3 +47,5 @@ buffalo generate resource company name description:nulls.Text contact_person:uui
 buffalo generate resource person name surname company_id:uuid email phone id_number
 buffalo generate resource token token_id person_id:uuid
 buffalo generate resource access_group name description:nulls.Text
+buffalo generate resource access_group_door access_group_id:uuid door_id:uuid
+buffalo generate resource token_access_group token_id:uuid access_group_id:uuid

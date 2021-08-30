@@ -1,0 +1,6 @@
+- id: "token_access_group.created.success"
+  translation: "AccessGroup \"{{.Name}}\" was successfully added to token \"{{.Token}}\"."
+- id: "token_access_group.updated.success"
+  translation: "TokenAccessGroup was successfully updated."
+- id: "token_access_group.destroyed.success"
+  translation: "AccessGroup \"{{.Name}}\" was successfully removed from token \"{{.Token}}\"."

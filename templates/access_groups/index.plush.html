@@ -1,13 +1,4 @@
 <div class="py-4 mb-2">
-  <h3 class="d-inline-block">Edit Token</h3>
-</div>
-
-<%= formFor(token, {action: personTokenPath({ person_id: person.ID, token_id: token.ID }), method: "PUT"}) { %>
-  <%= partial("tokens/form.html") %>
-  <%= linkTo(personTokenPath({ person_id: person.ID, token_id: token.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
-<% } %>
-
-<div class="py-4 mb-2">
   <h3 class="d-inline-block">AccessGroups</h3>
   <div class="float-right">
     <%= linkTo(newAccessGroupsPath(), {class: "btn btn-primary"}) { %>
@@ -18,20 +9,12 @@
 
 <table class="table table-hover table-bordered">
   <thead class="thead-light">
-    <th>&nbsp;</th>
     <th>Name</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for (accessGroup) in accessGroups { %>
       <tr>
-        <td class="align-middle">
-          <%= form({ id: formID(accessGroup.ID), action: tokenAccessGroupsPath({ token_id: token.ID, access_group_id: accessGroup.ID }), method: "POST", data-remote: "true"}) { %>
-            <input name="AccessGroup-<%= accessGroup.ID %>" type="checkbox" value="true" onchange="this.form.submit()" <%= tokenAccessGroupHelper(token, accessGroup) %>>
-            <input name="AccessGroup-<%= accessGroup.ID %>" type="hidden" value="false">
-            <input name="Person" type="hidden" value="<%= token.Person.ID %>">
-          <% } %>
-        </td>
         <td class="align-middle"><%= accessGroup.Name %></td>
         <td>
           <div class="float-right">
@@ -44,3 +27,7 @@
     <% } %>
   </tbody>
 </table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

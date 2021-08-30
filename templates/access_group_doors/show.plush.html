@@ -1,0 +1,31 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">AccessGroupDoor Details</h3>
+
+  <div class="float-right">
+    <%= linkTo(accessGroupDoorsPath(), {class: "btn btn-info"}) { %>
+      Back to all AccessGroupDoors
+    <% } %>
+    <%= linkTo(editAccessGroupDoorPath({ access_group_door_id: accessGroupDoor.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(accessGroupDoorPath({ access_group_door_id: accessGroupDoor.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">AccessGroupID</label>
+    <p class="d-inline-block"><%= accessGroupDoor.AccessGroupID %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">DoorID</label>
+    <p class="d-inline-block"><%= accessGroupDoor.DoorID %></p>
+  </li>
+
+
+</ul>

@@ -1,0 +1,6 @@
+- id: "access_group_door.created.success"
+  translation: "Door \"{{.Building}}, {{.Floor}}, {{.Room}}\" was successfully added to AccessGroup \"{{.AccessGroup}}\"."
+- id: "access_group_door.updated.success"
+  translation: "AccessGroupDoor was successfully updated."
+- id: "access_group_door.destroyed.success"
+  translation: "Door \"{{.Building}}, {{.Floor}}, {{.Room}}\" was successfully removed from AccessGroup \"{{.AccessGroup}}\"."

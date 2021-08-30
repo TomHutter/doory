@@ -1,0 +1,6 @@
+- id: "access_group.created.success"
+  translation: "AccessGroup was successfully created."
+- id: "access_group.updated.success"
+  translation: "AccessGroup was successfully updated."
+- id: "access_group.destroyed.success"
+  translation: "AccessGroup was successfully destroyed."

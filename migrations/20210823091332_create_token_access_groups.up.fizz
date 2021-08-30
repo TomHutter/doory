@@ -1,0 +1,6 @@
+create_table("token_access_groups") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("token_id", "uuid", {})
+	t.Column("access_group_id", "uuid", {})
+	t.Timestamps()
+}

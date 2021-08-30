@@ -38,3 +38,24 @@ CREATE TABLE IF NOT EXISTS "tokens" (
 "created_at" DATETIME NOT NULL,
 "updated_at" DATETIME NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "access_groups" (
+"id" TEXT PRIMARY KEY,
+"name" TEXT NOT NULL,
+"description" TEXT,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "access_group_doors" (
+"id" TEXT PRIMARY KEY,
+"access_group_id" char(36) NOT NULL,
+"door_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "token_access_groups" (
+"id" TEXT PRIMARY KEY,
+"token_id" char(36) NOT NULL,
+"access_group_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);

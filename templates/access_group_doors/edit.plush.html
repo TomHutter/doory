@@ -1,0 +1,8 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">Edit AccessGroupDoor</h3>
+</div>
+
+<%= formFor(accessGroupDoor, {action: accessGroupDoorPath({ access_group_door_id: accessGroupDoor.ID }), method: "PUT"}) { %>
+  <%= partial("access_group_doors/form.html") %>
+  <%= linkTo(accessGroupDoorPath({ access_group_door_id: accessGroupDoor.ID }), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+<% } %>

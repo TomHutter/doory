@@ -116,7 +116,7 @@ func (v PeopleResource) Show(c buffalo.Context) error {
 	tokens := &models.Tokens{}
 
 	// Retrieve all Tokens from the DB
-	if err := tx.Order("token_id").Where("person_id in (?)", c.Param("person_id")).All(tokens); err != nil {
+	if err := tx.Eager().Order("token_id").Where("person_id in (?)", c.Param("person_id")).All(tokens); err != nil {
 		return err
 	}
 
@@ -142,7 +142,9 @@ func (v PeopleResource) New(c buffalo.Context) error {
 
 	c.Set("person", person)
 
-	set_companies(c)
+	if err := set_companies(c); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/people/new.plush.html"))
 }
@@ -164,7 +166,9 @@ func (v PeopleResource) Create(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
-	set_companies(c)
+	if err := set_companies(c); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(person)
@@ -220,7 +224,31 @@ func (v PeopleResource) Edit(c buffalo.Context) error {
 
 	c.Set("person", person)
 
-	set_companies(c)
+	if err := set_companies(c); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	if err := set_person_tokens(c, person); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	// Set helper for checkbox active
+	c.Set("activeHelper", func() string {
+		if person.IsActive {
+			return "checked=\"\""
+		} else {
+			return ""
+		}
+	})
+
+	// Set helper for checkbox alarm
+	c.Set("alarmHelper", func() string {
+		if person.Alarm {
+			return "checked=\"\""
+		} else {
+			return ""
+		}
+	})
 
 	return c.Render(http.StatusOK, r.HTML("/people/edit.plush.html"))
 }

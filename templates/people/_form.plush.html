@@ -1,9 +1,36 @@
-<%= f.CheckboxTag("IsActive") %>
-<%= f.InputTag("Name") %>
-<%= f.InputTag("Surname") %>
-<%= f.SelectTag("CompanyID", {"label": "Company", options: companies, value: person.CompanyID}) %>
-<%= f.InputTag("Email") %>
-<%= f.InputTag("Phone") %>
-<%= f.InputTag("IDNumber") %>
-<%= f.CheckboxTag("Alarm") %>
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    <th>active</th><th>Name</th><th>Surname</th><th>CompanyID</th><th>Email</th><th>Phone</th><th>IDNumber</th><th>Alarm</th>
+  </thead>
+  <tbody>
+      <tr>
+        <td class="align-middle">
+            <input id="person-IsActive" name="IsActive" onchange="this.form.submit()" type="checkbox" value="true" <%= activeHelper() %>>
+            <%= f.HiddenTag("IsActive", {value: "false"}) %>
+        </td>
+        <td class="align-middle">
+            <%= f.InputTag("Name") %>
+        </td>
+        <td class="align-middle">
+            <%= f.InputTag("Surname") %>
+        </td>
+        <td class="align-middle">
+            <%= f.SelectTag("CompanyID", {"label": "Company", options: companies, value: person.CompanyID}) %>
+        </td>
+        <td class="align-middle">
+            <%= f.InputTag("Email") %>
+        </td>
+        <td class="align-middle">
+            <%= f.InputTag("Phone") %>
+        </td>
+        <td class="align-middle">
+            <%= f.InputTag("IDNumber") %>
+        </td>
+        <td class="align-middle">
+            <input id="person-Alarm" name="Alarm" onchange="this.form.submit()" type="checkbox" value="true" <%= alarmHelper() %>>
+            <%= f.HiddenTag("Alarm", {value: "false"}) %>
+        </td>
+      </tr>
+  </tbody>
+</table>
 <button class="btn btn-success" role="submit">Save</button>

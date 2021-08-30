@@ -1,0 +1,6 @@
+create_table("access_group_doors") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("access_group_id", "uuid", {})
+	t.Column("door_id", "uuid", {})
+	t.Timestamps()
+}

@@ -1,0 +1,33 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">TokenAccessGroups</h3>
+  <div class="float-right">
+    <%= linkTo(newTokenAccessGroupsPath(), {class: "btn btn-primary"}) { %>
+      Create New TokenAccessGroup
+    <% } %>
+  </div>
+</div>
+
+<table class="table table-hover table-bordered">
+  <thead class="thead-light">
+    <th>TokenID</th><th>AccessGroupID</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (tokenAccessGroup) in tokenAccessGroups { %>
+      <tr>
+        <td class="align-middle"><%= tokenAccessGroup.TokenID %></td><td class="align-middle"><%= tokenAccessGroup.AccessGroupID %></td>
+        <td>
+          <div class="float-right">
+            <%= linkTo(tokenAccessGroupPath({ token_access_group_id: tokenAccessGroup.ID }), {class: "btn btn-info", body: "View"}) %>
+            <%= linkTo(editTokenAccessGroupPath({ token_access_group_id: tokenAccessGroup.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+            <%= linkTo(tokenAccessGroupPath({ token_access_group_id: tokenAccessGroup.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

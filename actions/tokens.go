@@ -6,6 +6,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/x/responder"
+	"github.com/gofrs/uuid"
 	"net/http"
 )
 
@@ -136,9 +137,40 @@ func (v TokensResource) Edit(c buffalo.Context) error {
 	// Allocate an empty Token
 	token := &models.Token{}
 
-	if err := tx.Find(token, c.Param("token_id")); err != nil {
+	if err := tx.Eager().Find(token, c.Param("token_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
+
+	accessGroups := &models.AccessGroups{}
+
+	if err := set_access_groups(c, accessGroups); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	// Check box if tokenAccessGroup token, accessGroup exists
+	c.Set("tokenAccessGroupHelper", func(token *models.Token, accessGroup models.AccessGroup) string {
+		tokenAccessGroup := &models.TokenAccessGroup{}
+		if err := tx.Where("token_id = ? and access_group_id = ?", token.ID, accessGroup.ID).First(tokenAccessGroup); err != nil {
+			return ""
+		} else {
+			return "checked=\"\""
+		}
+	})
+
+	// Set helper for form IDs
+	c.Set("formID", func(id uuid.UUID) string {
+		return fmt.Sprintf("access-group-%s", id.String())
+	})
+
+	usedAccessGroups := make(map[uuid.UUID]bool)
+
+	if err := set_used_access_groups(c, accessGroups, usedAccessGroups); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	//if err := set_access_groups(c, token); err != nil {
+	//	return c.Error(http.StatusNotFound, err)
+	//}
 
 	c.Set("token", token)
 	return c.Render(http.StatusOK, r.HTML("/tokens/edit.plush.html"))

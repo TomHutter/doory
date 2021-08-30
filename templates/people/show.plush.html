@@ -45,13 +45,13 @@
 
 <table class="table table-hover table-bordered">
   <thead class="thead-light">
-    <th>TokenID</th><th>PersonID</th>
+    <th>TokenID</th><th>AccessGroups</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for (token) in tokens { %>
       <tr>
-        <td class="align-middle"><%= token.TokenID %></td><td class="align-middle"><%= token.PersonID %></td>
+        <td class="align-middle"><%= token.TokenID %></td><td class="align-middle"><%= token.AccessGroups %></td>
         <td>
           <div class="float-right">
             <%= linkTo(editPersonTokenPath({ person_id: person.ID, token_id: token.ID }), {class: "btn btn-warning", body: "Edit"}) %>

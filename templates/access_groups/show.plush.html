@@ -1,0 +1,31 @@
+<div class="py-4 mb-2">
+  <h3 class="d-inline-block">AccessGroup Details</h3>
+
+  <div class="float-right">
+    <%= linkTo(accessGroupsPath(), {class: "btn btn-info"}) { %>
+      Back to all AccessGroups
+    <% } %>
+    <%= linkTo(editAccessGroupPath({ access_group_id: accessGroup.ID }), {class: "btn btn-warning", body: "Edit"}) %>
+    <%= linkTo(accessGroupPath({ access_group_id: accessGroup.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
+  </div>
+</div>
+
+
+
+<ul class="list-group mb-2 ">
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Name</label>
+    <p class="d-inline-block"><%= accessGroup.Name %></p>
+  </li>
+
+
+
+  <li class="list-group-item pb-1">
+    <label class="small d-block">Description</label>
+    <p class="d-inline-block"><%= accessGroup.Description %></p>
+  </li>
+
+
+</ul>

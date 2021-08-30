@@ -48,7 +48,9 @@ func (v CompaniesResource) List(c buffalo.Context) error {
 		return err
 	}
 
-	set_people(c, &models.Company{})
+	if err := set_company_people(c, &models.Company{}); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// Add the paginator to the context so it can be used in the template.
@@ -96,7 +98,9 @@ func (v CompaniesResource) Show(c buffalo.Context) error {
 func (v CompaniesResource) New(c buffalo.Context) error {
 	c.Set("company", &models.Company{})
 
-	set_people(c, &models.Company{})
+	if err := set_company_people(c, &models.Company{}); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/companies/new.plush.html"))
 }
@@ -118,7 +122,9 @@ func (v CompaniesResource) Create(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
-	set_people(c, &models.Company{})
+	if err := set_company_people(c, &models.Company{}); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(company)
@@ -174,7 +180,9 @@ func (v CompaniesResource) Edit(c buffalo.Context) error {
 
 	c.Set("company", company)
 
-	set_people(c, company)
+	if err := set_company_people(c, company); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/companies/edit.plush.html"))
 }

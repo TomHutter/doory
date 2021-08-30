@@ -1,0 +1,20 @@
+create_table("access_groups") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("name", "string", {})
+	t.Column("description", "text", {null: true})
+	t.Timestamps()
+}
+
+create_table("tokens_access_groups") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("token_id", "uuid", {})
+	t.Column("access_group_id", "uuid", {})
+	t.Timestamps()
+}
+
+create_table("access_groups_doors") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("access_group_id", "uuid", {})
+	t.Column("door_id", "uuid", {})
+	t.Timestamps()
+}

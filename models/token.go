@@ -12,12 +12,13 @@ import (
 
 // Token is used by pop to map your tokens database table to your go code.
 type Token struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	TokenID   string    `json:"token_id" db:"token_id"`
-	PersonID  uuid.UUID `json:"person_id" db:"person_id"`
-	Person    Person    `json:"person,omitempty" belongs_to:"person"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID           uuid.UUID     `json:"id" db:"id"`
+	TokenID      string        `json:"token_id" db:"token_id"`
+	PersonID     uuid.UUID     `json:"person_id" db:"person_id"`
+	Person       Person        `json:"person,omitempty" belongs_to:"person"`
+	AccessGroups []AccessGroup `json:"access_groups" many_to_many:"token_access_groups" db:"-"`
+	CreatedAt    time.Time     `json:"created_at" db:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted
