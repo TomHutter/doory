@@ -6,6 +6,8 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gofrs/uuid"
+	"html/template"
+	"strings"
 )
 
 func set_companies(c buffalo.Context) error {
@@ -104,6 +106,15 @@ func set_person_helpers(c buffalo.Context) {
 		} else {
 			return true
 		}
+	})
+
+	// Show linked names of tokenAccessGroups
+	c.Set("accessGroupList", func(token models.Token) template.HTML {
+		list := make([]string, 0)
+		for _, ag := range token.AccessGroups {
+			list = append(list, fmt.Sprintf("<a href=\"/access_groups/%s/\">%s</a>", ag.ID.String(), ag.Name))
+		}
+		return template.HTML(strings.Join(list, ", "))
 	})
 }
 
