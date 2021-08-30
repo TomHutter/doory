@@ -25,7 +25,6 @@ require (
 	github.com/gobuffalo/validate/v3 v3.3.0
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/gofrs/uuid v4.0.0+incompatible
-	github.com/gorilla/mux v1.8.0
 	github.com/jackc/pgx/v4 v4.13.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/markbates/grift v1.5.0

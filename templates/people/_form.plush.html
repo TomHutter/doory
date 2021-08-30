@@ -5,7 +5,11 @@
   <tbody>
       <tr>
         <td class="align-middle">
-            <input id="person-IsActive" name="IsActive" onchange="this.form.submit()" type="checkbox" value="true" <%= activeHelper() %>>
+          <%= if (personExists(person)) { %>
+            <input id="person-IsActive" name="IsActive" onchange="this.form.submit()" type="checkbox" value="true" <%= activeHelper(person.IsActive) %>>
+          <% } else { %>
+            <input id="person-IsActive" name="IsActive" type="checkbox" value="true" checked="">
+          <% } %>
             <%= f.HiddenTag("IsActive", {value: "false"}) %>
         </td>
         <td class="align-middle">
@@ -27,7 +31,11 @@
             <%= f.InputTag("IDNumber") %>
         </td>
         <td class="align-middle">
-            <input id="person-Alarm" name="Alarm" onchange="this.form.submit()" type="checkbox" value="true" <%= alarmHelper() %>>
+          <%= if (personExists(person)) { %>
+            <input id="person-Alarm" name="Alarm" onchange="this.form.submit()" type="checkbox" value="true" <%= alarmHelper(person.Alarm) %>>
+          <% } else { %>
+            <input id="person-Alarm" name="Alarm" type="checkbox" value="true">
+          <% } %>
             <%= f.HiddenTag("Alarm", {value: "false"}) %>
         </td>
       </tr>

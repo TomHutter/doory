@@ -17,7 +17,7 @@
       <tr>
         <td class="align-middle">
           <%= formFor(person, {action: personPath({ person_id: person.ID }), method: "PUT", data-remote: "true"}) { %>
-            <input id="person-IsActive" name="IsActive" onchange="this.form.submit()" type="checkbox" value="true" <%= activeHelper(person) %>>
+            <input id="person-IsActive" name="IsActive" onchange="this.form.submit()" type="checkbox" value="true" <%= activeHelper(person.IsActive) %>>
             <%= f.HiddenTag("IsActive", {value: "false"}) %>
             <%= f.HiddenTag("Redirect", {value: "index"}) %>
           <% } %>
@@ -25,7 +25,7 @@
         <td class="align-middle"><%= person.Name %></td><td class="align-middle"><%= person.Surname %></td><td class="align-middle"><%= person.Company.Name %></td><td class="align-middle"><%= person.Email %></td><td class="align-middle"><%= person.Phone %></td><td class="align-middle"><%= person.IDNumber %></td>
         <td class="align-middle">
           <%= formFor(person, {action: personPath({ person_id: person.ID }), method: "PUT", data-remote: "true"}) { %>
-            <input id="person-Alarm" name="Alarm" onchange="this.form.submit()" type="checkbox" value="true" <%= alarmHelper(person) %>>
+            <input id="person-Alarm" name="Alarm" onchange="this.form.submit()" type="checkbox" value="true" <%= alarmHelper(person.Alarm) %>>
             <%= f.HiddenTag("Alarm", {value: "false"}) %>
             <%= f.HiddenTag("Redirect", {value: "index"}) %>
           <% } %>

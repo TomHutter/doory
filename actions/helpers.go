@@ -3,8 +3,6 @@ package actions
 import (
 	"doors/models"
 	"fmt"
-	"log"
-
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gofrs/uuid"
@@ -80,24 +78,34 @@ func set_person(c buffalo.Context) error {
 	return nil
 }
 
-/*
-func set_access_groups(c buffalo.Context, token *models.Token) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return fmt.Errorf("no transaction found")
-	}
-	access_groups := &models.AccessGroups{}
+func set_person_helpers(c buffalo.Context) {
+	// Set helper for checkbox active
+	c.Set("activeHelper", func(isActive bool) string {
+		if isActive {
+			return "checked=\"\""
+		} else {
+			return ""
+		}
+	})
 
-	// Retrieve all AccessGroups from the DB
-	if err := tx.Order("name").Where("token_id in (?)", token.ID).All(access_groups); err != nil {
-		return err
-	}
+	// Set helper for checkbox alarm
+	c.Set("alarmHelper", func(alarm bool) string {
+		if alarm {
+			return "checked=\"\""
+		} else {
+			return ""
+		}
+	})
 
-	c.Set("access_groups", access_groups)
-	return nil
+	// Set helper for person already created
+	c.Set("personExists", func(person *models.Person) bool {
+		if person.ID == uuid.Nil {
+			return false
+		} else {
+			return true
+		}
+	})
 }
-*/
 
 func set_doors(c buffalo.Context, doors *models.Doors) error {
 	// Get the DB connection from the context
@@ -139,19 +147,19 @@ func set_opening_doors(c buffalo.Context, doors *models.Doors, openingDoors map[
 	// Allocate an empty AccessGroup
 	accessGroup := &models.AccessGroup{}
 
-	// Retrieve AccessGroup from the DB
-	if err := tx.Eager().Find(accessGroup, c.Param("access_group_id")); err != nil {
-		return err
-	}
+	if c.Param("access_group_id") != "" {
+		// Retrieve AccessGroup from the DB
+		if err := tx.Eager().Find(accessGroup, c.Param("access_group_id")); err != nil {
+			return err
+		}
 
-	log.Println(accessGroup)
-
-	for _, door := range *doors {
-		name := fmt.Sprintf("Door-%s", door.ID)
-		if c.Param(name) == "true" || accessGroupOpensDoor(accessGroup, &door) {
-			openingDoors[door.ID] = true
-		} else {
-			openingDoors[door.ID] = false
+		for _, door := range *doors {
+			name := fmt.Sprintf("Door-%s", door.ID)
+			if c.Param(name) == "true" || accessGroupOpensDoor(accessGroup, &door) {
+				openingDoors[door.ID] = true
+			} else {
+				openingDoors[door.ID] = false
+			}
 		}
 	}
 
