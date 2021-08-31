@@ -39,6 +39,27 @@ func (a AccessGroups) String() string {
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
 func (a *AccessGroup) Validate(tx *pop.Connection) (*validate.Errors, error) {
+	accessGroup := &AccessGroup{}
+
+	var count int
+	var err error
+
+	count, err = tx.Where("name = ?", a.Name).Count(accessGroup)
+	if err != nil {
+		errors := validate.NewErrors()
+		errors.Add("name", "error during db lookup access_groups-Name")
+		return errors, err
+	}
+
+	if count > 0 {
+		if err := tx.Where("name = ?", a.Name).First(accessGroup); err != nil {
+			return nil, err
+		}
+		errors := validate.NewErrors()
+		errors.Add("name", "Name is already taken.")
+		return errors, nil
+	}
+
 	return validate.Validate(
 		&validators.StringIsPresent{Field: a.Name, Name: "Name"},
 	), nil
@@ -59,11 +80,10 @@ func (a *AccessGroup) ValidateUpdate(tx *pop.Connection) (*validate.Errors, erro
 // AddDoor adds door to AccessGroup, if door belongs not to Access Group already.
 func (a *AccessGroup) AddDoor(tx *pop.Connection, door *Door) (*validate.Errors, error) {
 	accessGroupDoors := &AccessGroupDoors{}
-	q := tx.RawQuery("SELECT * FROM access_group_doors WHERE access_group_id in (?) and door_id in (?)", a.ID, door.ID)
 	var count int
 	var err error
 
-	count, err = q.Count(accessGroupDoors)
+	count, err = tx.Where("access_group_id = ? and door_id = ?", a.ID, door.ID).Count(accessGroupDoors)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("token_id", "error during db lookup tokens-TokenID")
