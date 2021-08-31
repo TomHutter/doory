@@ -4,6 +4,7 @@ import (
 	"doors/models"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
@@ -173,6 +174,26 @@ func (v TokensResource) Edit(c buffalo.Context) error {
 	//	return c.Error(http.StatusNotFound, err)
 	//}
 
+	// Show number of accessable doors
+	c.Set("doorsCount", func(access_group models.AccessGroup) string {
+
+		// Allocate an empty AccessGroup
+		accessGroupDoors := &models.AccessGroupDoors{}
+
+		if err := tx.Eager().Where("access_group_id = ?", access_group.ID.String()).All(accessGroupDoors); err != nil {
+			//if err := tx.Q().GroupBy("building").Where("accessGroup, c.Param("access_group_id")); err != nil {
+			return c.Error(http.StatusNotFound, err).Error()
+		}
+		list := make(map[string]int)
+		for _, agd := range *accessGroupDoors {
+			list[agd.Door.Building] += 1
+		}
+		doorCount := make([]string, 0)
+		for building, count := range list {
+			doorCount = append(doorCount, fmt.Sprintf("%s: %d", building, count))
+		}
+		return strings.Join(doorCount, ", ")
+	})
 	c.Set("token", token)
 	return c.Render(http.StatusOK, r.HTML("/tokens/edit.plush.html"))
 }

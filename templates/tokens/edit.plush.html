@@ -20,6 +20,7 @@
   <thead class="thead-light">
     <th>&nbsp;</th>
     <th>Name</th>
+    <th>Access to doors</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
@@ -33,6 +34,7 @@
           <% } %>
         </td>
         <td class="align-middle"><%= accessGroup.Name %></td>
+        <td class="align-middle"><%= doorsCount(accessGroup) %></td>
         <td>
           <div class="float-right">
             <%= linkTo(accessGroupPath({ access_group_id: accessGroup.ID }), {class: "btn btn-info", body: "View"}) %>
