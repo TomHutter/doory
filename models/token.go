@@ -3,11 +3,12 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
-	"time"
 )
 
 // Token is used by pop to map your tokens database table to your go code.
@@ -53,8 +54,11 @@ func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	}
 
 	if count > 0 {
+		if err := tx.Eager().Where("token_id = ?", t.TokenID).First(token); err != nil {
+			return nil, err
+		}
 		errors := validate.NewErrors()
-		errors.Add("token_id", fmt.Sprintf("TokenID \"%s\" is already in use", t.TokenID))
+		errors.Add("token_id", fmt.Sprintf("TokenID \"%s\" is already in use by %s %s", t.TokenID, token.Person.Name, token.Person.Surname))
 		return errors, nil
 	}
 
