@@ -40,6 +40,27 @@ func (c Companies) String() string {
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
 func (c *Company) Validate(tx *pop.Connection) (*validate.Errors, error) {
+	company := &Company{}
+
+	var count int
+	var err error
+
+	count, err = tx.Where("name = ? and id != ?", c.Name, c.ID).Count(company)
+	if err != nil {
+		errors := validate.NewErrors()
+		errors.Add("name", "error during db lookup access_groups-Name")
+		return errors, err
+	}
+
+	if count > 0 {
+		if err := tx.Where("name = ?", c.Name).First(company); err != nil {
+			return nil, err
+		}
+		errors := validate.NewErrors()
+		errors.Add("name", "Name is already taken.")
+		return errors, nil
+	}
+
 	return validate.Validate(
 		&validators.StringIsPresent{Field: c.Name, Name: "Name"},
 	), nil
