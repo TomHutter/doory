@@ -248,6 +248,18 @@ func (v DoorsResource) Destroy(c buffalo.Context) error {
 		return c.Error(http.StatusNotFound, err)
 	}
 
+	// Allocate an empty AccessGroupDoors
+	accessGroupDoors := &models.AccessGroupDoors{}
+
+	// Get all AccessGroupDoors belonging to door
+	if err := tx.Where("door_id = ?", c.Param("door_id")).All(accessGroupDoors); err != nil {
+		return err
+	}
+
+	if err := tx.Destroy(accessGroupDoors); err != nil {
+		return err
+	}
+
 	if err := tx.Destroy(door); err != nil {
 		return err
 	}
