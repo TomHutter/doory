@@ -113,7 +113,7 @@ func (v TokensResource) Create(c buffalo.Context) error {
 		c.Flash().Add("success", T.Translate(c, "token.created.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/people/%v", c.Param("person_id"))
+		return c.Redirect(http.StatusSeeOther, "/people/%v/tokens/%v/edit/", c.Param("person_id"), token.ID)
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusCreated, r.JSON(token))
 	}).Wants("xml", func(c buffalo.Context) error {
