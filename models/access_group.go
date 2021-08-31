@@ -76,30 +76,3 @@ func (a *AccessGroup) ValidateCreate(tx *pop.Connection) (*validate.Errors, erro
 func (a *AccessGroup) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
-
-// AddDoor adds door to AccessGroup, if door belongs not to Access Group already.
-func (a *AccessGroup) AddDoor(tx *pop.Connection, door *Door) (*validate.Errors, error) {
-	accessGroupDoors := &AccessGroupDoors{}
-	var count int
-	var err error
-
-	count, err = tx.Where("access_group_id = ? and door_id = ?", a.ID, door.ID).Count(accessGroupDoors)
-	if err != nil {
-		errors := validate.NewErrors()
-		errors.Add("token_id", "error during db lookup tokens-TokenID")
-		return errors, err
-	}
-
-	// door belongs already to AccessGroup
-	if count > 0 {
-		return nil, nil
-	}
-
-	accessGroupDoor := &AccessGroupDoor{
-		AccessGroupID: a.ID,
-		DoorID:        door.ID,
-	}
-
-	// Validate the data from the html form
-	return tx.ValidateAndCreate(accessGroupDoor)
-}

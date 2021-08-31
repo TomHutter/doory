@@ -94,18 +94,6 @@ func (v AccessGroupsResource) Show(c buffalo.Context) error {
 func (v AccessGroupsResource) New(c buffalo.Context) error {
 	c.Set("accessGroup", &models.AccessGroup{})
 
-	doors := &models.Doors{}
-
-	if err := set_doors(c, doors); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
-	openingDoors := make(map[uuid.UUID]bool)
-
-	if err := set_opening_doors(c, doors, openingDoors); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
 	return c.Render(http.StatusOK, r.HTML("/access_groups/new.plush.html"))
 }
 
@@ -120,18 +108,6 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 		return err
 	}
 
-	doors := &models.Doors{}
-
-	if err := set_doors(c, doors); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
-	openingDoors := make(map[uuid.UUID]bool)
-
-	if err := set_opening_doors(c, doors, openingDoors); err != nil {
-		return c.Error(http.StatusNotFound, err)
-	}
-
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
@@ -142,27 +118,6 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 	verrs, err := tx.ValidateAndCreate(accessGroup)
 	if err != nil {
 		return err
-	}
-
-	// create accessGroupDoors relation for each checked door
-	for doorID, open := range openingDoors {
-		// leave loop if we have errors
-		if verrs.HasAny() {
-			break
-		}
-		// door checked => create relation
-		if open {
-			accessGroupDoor := &models.AccessGroupDoor{
-				AccessGroupID: accessGroup.ID,
-				DoorID:        doorID,
-			}
-
-			// Validate the data from the html form
-			verrs, err = tx.ValidateAndCreate(accessGroupDoor)
-			if err != nil {
-				return err
-			}
-		}
 	}
 
 	if verrs.HasAny() {
@@ -187,7 +142,7 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 		c.Flash().Add("success", T.Translate(c, "accessGroup.created.success"))
 
 		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/access_groups/%v", accessGroup.ID)
+		return c.Redirect(http.StatusSeeOther, "/access_groups/%v/edit", accessGroup.ID)
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusCreated, r.JSON(accessGroup))
 	}).Wants("xml", func(c buffalo.Context) error {
@@ -270,28 +225,10 @@ func (v AccessGroupsResource) Update(c buffalo.Context) error {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	door := models.Door{}
-
-	// create accessGroupDoors relation for each checked door
-	for doorID, open := range openingDoors {
-		// leave loop if we have errors
-		if verrs.HasAny() {
-			break
-		}
-		// door checked => add door to accessGroup
-		if open {
-
-			if err := tx.Eager().Find(door, doorID); err != nil {
-				return c.Error(http.StatusNotFound, err)
-			}
-
-			verrs, err = accessGroup.AddDoor(tx, &door)
-			if err != nil {
-				return err
-			}
-
-		}
-	}
+	// Set helper for checkbox active
+	c.Set("formID", func(id uuid.UUID) string {
+		return fmt.Sprintf("door-%s", id.String())
+	})
 
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
