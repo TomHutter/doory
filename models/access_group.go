@@ -44,7 +44,7 @@ func (a *AccessGroup) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var count int
 	var err error
 
-	count, err = tx.Where("name = ?", a.Name).Count(accessGroup)
+	count, err = tx.Where("name = ? and id != ?", a.Name, a.ID).Count(accessGroup)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("name", "error during db lookup access_groups-Name")
