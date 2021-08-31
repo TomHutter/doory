@@ -289,6 +289,18 @@ func (v AccessGroupsResource) Destroy(c buffalo.Context) error {
 		return err
 	}
 
+	// Allocate an empty TokenAccessGroups
+	tokenAccessGroups := &models.TokenAccessGroups{}
+
+	// Get all TokenAccessGroups belonging to accessGroup
+	if err := tx.Where("access_group_id = ?", c.Param("access_group_id")).All(tokenAccessGroups); err != nil {
+		return err
+	}
+
+	if err := tx.Destroy(tokenAccessGroups); err != nil {
+		return err
+	}
+
 	if err := tx.Destroy(accessGroup); err != nil {
 		return err
 	}
