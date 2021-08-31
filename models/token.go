@@ -41,12 +41,11 @@ func (t Tokens) String() string {
 // This method is not required and may be deleted.
 func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	token := &Token{}
-	q := tx.RawQuery("SELECT * FROM tokens WHERE token_id = ?", t.TokenID)
 
 	var count int
 	var err error
 
-	count, err = q.Count(token)
+	count, err = tx.Where("token_id = ?", t.TokenID).Count(token)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("token_id", "error during db lookup tokens-TokenID")
