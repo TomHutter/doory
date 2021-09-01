@@ -139,7 +139,7 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "accessGroup.created.success"))
+		c.Flash().Add("success", T.Translate(c, "access_group.created.success"))
 
 		// and redirect to the show page
 		return c.Redirect(http.StatusSeeOther, "/access_groups/%v/edit", accessGroup.ID)
@@ -249,7 +249,7 @@ func (v AccessGroupsResource) Update(c buffalo.Context) error {
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a success message
-		c.Flash().Add("success", T.Translate(c, "accessGroup.updated.success"))
+		c.Flash().Add("success", T.Translate(c, "access_group.updated.success"))
 
 		// and redirect to the show page
 		return c.Redirect(http.StatusSeeOther, "/access_groups/%v", accessGroup.ID)
@@ -307,7 +307,7 @@ func (v AccessGroupsResource) Destroy(c buffalo.Context) error {
 
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a flash message
-		c.Flash().Add("success", T.Translate(c, "accessGroup.destroyed.success"))
+		c.Flash().Add("success", T.Translate(c, "access_group.destroyed.success"))
 
 		// Redirect to the index page
 		return c.Redirect(http.StatusSeeOther, "/access_groups")
