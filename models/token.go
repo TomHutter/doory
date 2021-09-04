@@ -45,7 +45,7 @@ func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var count int
 	var err error
 
-	count, err = tx.Where("token_id = ?", t.TokenID).Count(token)
+	count, err = tx.Where("UPPER(token_id) = UPPER(?)", t.TokenID).Count(token)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("token_id", "error during db lookup tokens-TokenID")
@@ -53,7 +53,7 @@ func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	}
 
 	if count > 0 {
-		if err := tx.Eager().Where("token_id = ?", t.TokenID).First(token); err != nil {
+		if err := tx.Eager().Where("UPPER(token_id) = UPPER(?)", t.TokenID).First(token); err != nil {
 			return nil, err
 		}
 		errors := validate.NewErrors()

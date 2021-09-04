@@ -45,7 +45,7 @@ func (c *Company) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var count int
 	var err error
 
-	count, err = tx.Where("name = ? and id != ?", c.Name, c.ID).Count(company)
+	count, err = tx.Where("UPPER(name) = UPPER(?) and id != ?", c.Name, c.ID).Count(company)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("name", "error during db lookup access_groups-Name")
@@ -53,7 +53,7 @@ func (c *Company) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	}
 
 	if count > 0 {
-		if err := tx.Where("name = ?", c.Name).First(company); err != nil {
+		if err := tx.Where("UPPER(name) = UPPER(?)", c.Name).First(company); err != nil {
 			return nil, err
 		}
 		errors := validate.NewErrors()

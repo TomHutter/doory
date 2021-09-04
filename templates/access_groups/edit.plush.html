@@ -25,9 +25,11 @@
     <%= for (door) in doors { %>
       <tr>
         <td class="align-middle">
-          <%= form({id: formID(door.ID), action: accessGroupDoorsPath({ access_group_id: accessGroup.ID, door_id: door.ID }), method: "POST", data-remote: "true"}) { %>
+          <%= form({id: formID(door.ID), action: accessGroupDoorsPath(), method: "POST", data-remote: "true"}) { %>
             <input name="Door-<%= door.ID %>" type="checkbox" value="true" onchange="this.form.submit()" <%= opensDoorHelper(door) %>>
             <input name="Door-<%= door.ID %>" type="hidden" value="false">
+            <input name="door_id" type="hidden" value="<%= door.ID.String() %>">
+            <input name="access_group_id" type="hidden" value="<%= accessGroup.ID.String() %>">
           <% } %>
         </td>
         <td class="align-middle"><%= door.Room %></td><td class="align-middle"><%= door.Floor %></td><td class="align-middle"><%= door.Building %></td><td class="align-middle"><%= door.Description %></td><td class="align-middle"><%= door.Company.Name %></td>

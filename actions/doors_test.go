@@ -102,7 +102,7 @@ func (as *ActionSuite) Test_DoorsResource_Destroy() {
 	as.Equal("/doors", res.Location())
 	count, err := as.DB.Count(&models.Doors{})
 	as.NoError(err)
-	as.Equal(1, count)
+	as.Equal(5, count)
 }
 
 func (as *ActionSuite) Test_DoorsResource_New() {
@@ -117,7 +117,7 @@ func (as *ActionSuite) Test_DoorsResource_Edit() {
 	door := &models.Door{}
 	err := as.DB.First(door)
 	as.NoError(err)
-	res := as.HTML("/doors/b37e3244-f915-4b7b-81d6-6c8a1edea102").Get()
+	res := as.HTML("/doors/b37e3244-f915-4b7b-81d6-6c8a1edea102/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
 	as.Contains(body, "Door for room #1 has a nice color")

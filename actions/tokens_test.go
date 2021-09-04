@@ -2,6 +2,7 @@ package actions
 
 import (
 	"doors/models"
+	"fmt"
 
 	"github.com/gofrs/uuid"
 )
@@ -43,7 +44,7 @@ func (as *ActionSuite) Test_TokensResource_Create() {
 	}
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(303, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+	as.Equal(fmt.Sprintf("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s/edit/", token.ID), res.Location())
 
 	err := as.DB.First(token)
 	as.NoError(err)
@@ -79,7 +80,7 @@ func (as *ActionSuite) Test_TokensResource_Create_Duplicates() {
 	}
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(303, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+	as.Equal(fmt.Sprintf("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s/edit/", token.ID), res.Location())
 
 	err := as.DB.First(token)
 	as.NoError(err)
@@ -90,11 +91,11 @@ func (as *ActionSuite) Test_TokensResource_Create_Duplicates() {
 	token = &models.Token{
 		ID:       id,
 		PersonID: pID,
-		TokenID:  "abcdef",
+		TokenID:  "ABCDEF",
 	}
 	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(422, res.Code)
-	as.Contains(res.Body.String(), "TokenID \"abcdef\" is already in use")
+	as.Contains(res.Body.String(), "TokenID \"ABCDEF\" is already in use")
 }
 
 func (as *ActionSuite) Test_TokensResource_Update() {
@@ -147,7 +148,7 @@ func (as *ActionSuite) Test_TokensResource_Edit() {
 	token := &models.Token{}
 	err := as.DB.First(token)
 	as.NoError(err)
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d").Get()
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
 	as.Contains(body, "Token#1")

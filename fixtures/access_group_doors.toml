@@ -1,0 +1,47 @@
+[[scenario]]
+name = "have some access_group_doors"
+
+  [[scenario.table]]
+    name = "access_group_doors"
+
+    [[scenario.table.row]]
+      id = "1440013e-3c84-4790-8619-8f7b07a24760"
+      access_group_id = "94685874-09df-44f0-bdb0-17438dcc1077"
+      door_id = "b37e3244-f915-4b7b-81d6-6c8a1edea102"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "521697c2-afdb-44a9-b164-bd3a1e85ee9c"
+      access_group_id = "94685874-09df-44f0-bdb0-17438dcc1077"
+      door_id = "e52f0021-f229-45a5-b6c6-c98ea086eabb"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "8b0757a9-f3fa-4a96-9091-4c5797634a1e"
+      access_group_id = "8910574a-92eb-4619-a273-9f50f9b2948d"
+      door_id = "6fbc7842-117e-4afc-84d7-1f90315d9a2e"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "183993a2-a3d1-4011-bd07-b927276e33ff"
+      access_group_id = "8910574a-92eb-4619-a273-9f50f9b2948d"
+      door_id = "10224347-2bca-4b4b-bc75-543abc4debcf"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "5807b87b-fe14-4dba-96b1-c8ebb8f3a90a"
+      access_group_id = "30f355b5-7395-4bee-befe-1e6336e1cd4e"
+      door_id = "55395c6c-075d-4933-b05f-e612f7d5703c"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "cdaf0006-ecb5-49a0-bc27-19b0b17f6fff"
+      access_group_id = "30f355b5-7395-4bee-befe-1e6336e1cd4e"
+      door_id = "6e54b6aa-2941-4533-bb1e-2c2629e9bf06"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

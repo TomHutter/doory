@@ -1,0 +1,26 @@
+[[scenario]]
+name = "have some access_groups"
+
+  [[scenario.table]]
+    name = "access_groups"
+
+    [[scenario.table.row]]
+      id = "94685874-09df-44f0-bdb0-17438dcc1077"
+      name = "Common"
+      description = "All common doors"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "8910574a-92eb-4619-a273-9f50f9b2948d"
+      name = "Company #1"
+      description = "Doors of company #1"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "30f355b5-7395-4bee-befe-1e6336e1cd4e"
+      name = "Company #2"
+      description = "Description for company #2"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

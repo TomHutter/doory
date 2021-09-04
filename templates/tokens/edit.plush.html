@@ -27,10 +27,12 @@
     <%= for (accessGroup) in accessGroups { %>
       <tr>
         <td class="align-middle">
-          <%= form({ id: formID(accessGroup.ID), action: tokenAccessGroupsPath({ token_id: token.ID, access_group_id: accessGroup.ID }), method: "POST", data-remote: "true"}) { %>
+          <%= form({ id: formID(accessGroup.ID), action: tokenAccessGroupsPath(), method: "POST", data-remote: "true"}) { %>
             <input name="AccessGroup-<%= accessGroup.ID %>" type="checkbox" value="true" onchange="this.form.submit()" <%= tokenAccessGroupHelper(token, accessGroup) %>>
             <input name="AccessGroup-<%= accessGroup.ID %>" type="hidden" value="false">
             <input name="Person" type="hidden" value="<%= token.Person.ID %>">
+            <input name="token_id" type="hidden" value="<%= token.ID %>">
+            <input name="access_group_id" type="hidden" value="<%= accessGroup.ID %>">
           <% } %>
         </td>
         <td class="align-middle"><%= accessGroup.Name %></td>

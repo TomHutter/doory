@@ -6,6 +6,7 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/x/responder"
+	"log"
 	"net/http"
 )
 
@@ -36,6 +37,8 @@ func (v AccessGroupDoorsResource) Create(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
+	log.Println("access_group_id:", c.Param("access_group_id"))
+	log.Println("door_id:", c.Param("door_id"))
 	accessGroup := &models.AccessGroup{}
 	// To find the AccessGroup the parameter access_group_id is used.
 	if err := tx.Find(accessGroup, c.Param("access_group_id")); err != nil {

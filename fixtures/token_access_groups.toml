@@ -1,0 +1,47 @@
+[[scenario]]
+name = "have some token_access_groups"
+
+  [[scenario.table]]
+    name = "token_access_groups"
+
+    [[scenario.table.row]]
+      id = "0d2dacdb-e23e-4e9f-b892-f8071ffab038"
+      token_id = "a68ec5fb-a829-46f5-81d5-5c39ee399239"
+      access_group_id = "94685874-09df-44f0-bdb0-17438dcc1077"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "3a6650c0-0453-494c-8a7c-69488ed4c1fd"
+      token_id = "3eb3735a-4ac1-44fc-9154-46fe073fb394"
+      access_group_id = "94685874-09df-44f0-bdb0-17438dcc1077"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "4935150d-bc28-4cac-93da-16f3d1579e35"
+      token_id = "a68ec5fb-a829-46f5-81d5-5c39ee399239"
+      access_group_id = "8910574a-92eb-4619-a273-9f50f9b2948d"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "4dbb3440-9b2a-4cdb-9f28-e388e6b32e30"
+      token_id = "c6f3d638-69d8-417b-817c-3c9f9f0d3bf3"
+      access_group_id = "8910574a-92eb-4619-a273-9f50f9b2948d"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "e92a06fa-9630-46af-af8f-e997a3beb1b1"
+      token_id = "dce65246-8dd0-432c-9587-67339ae897df"
+      access_group_id = "30f355b5-7395-4bee-befe-1e6336e1cd4e"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"
+
+    [[scenario.table.row]]
+      id = "1e1e8d37-8695-4701-90ef-9df1b8392ad3"
+      token_id = "dce65246-8dd0-432c-9587-67339ae897df"
+      access_group_id = "30f355b5-7395-4bee-befe-1e6336e1cd4e"
+      created_at = "<%= now() %>"
+      updated_at = "<%= now() %>"

@@ -43,7 +43,7 @@ func (as *ActionSuite) Test_PeopleResource_Create() {
 	}
 	res := as.HTML("/people").Post(person)
 	as.Equal(303, res.Code)
-	as.Equal(fmt.Sprintf("/people/%s", person.ID), res.Location())
+	as.Equal(fmt.Sprintf("/people/%s/edit/", person.ID), res.Location())
 
 	err := as.DB.First(person)
 	as.NoError(err)
@@ -82,7 +82,7 @@ func (as *ActionSuite) Test_PeopleResource_Update() {
 
 	res := as.HTML("/people/%s", person.ID).Put(person)
 	as.Equal(303, res.Code)
-	as.Equal(fmt.Sprintf("/people/%s", person.ID), res.Location())
+	as.Equal(fmt.Sprintf("/people/%s/edit/", person.ID), res.Location())
 
 	err = as.DB.Reload(person)
 	as.NoError(err)
@@ -146,7 +146,7 @@ func (as *ActionSuite) Test_PeopleResource_Edit() {
 	person := &models.Person{}
 	err := as.DB.First(person)
 	as.NoError(err)
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d").Get()
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
 	as.Contains(body, "luke.skywalker@tatooine.com")

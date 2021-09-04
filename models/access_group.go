@@ -2,12 +2,13 @@ package models
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/gobuffalo/nulls"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
-	"time"
 )
 
 // AccessGroup is used by pop to map your .model.Name.Proper.Pluralize.Underscore database table to your go code.
@@ -44,7 +45,7 @@ func (a *AccessGroup) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var count int
 	var err error
 
-	count, err = tx.Where("name = ? and id != ?", a.Name, a.ID).Count(accessGroup)
+	count, err = tx.Where("UPPER(name) = UPPER(?) and id != ?", a.Name, a.ID).Count(accessGroup)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("name", "error during db lookup access_groups-Name")
@@ -52,7 +53,7 @@ func (a *AccessGroup) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	}
 
 	if count > 0 {
-		if err := tx.Where("name = ?", a.Name).First(accessGroup); err != nil {
+		if err := tx.Where("UPPER(name) = UPPER(?)", a.Name).First(accessGroup); err != nil {
 			return nil, err
 		}
 		errors := validate.NewErrors()

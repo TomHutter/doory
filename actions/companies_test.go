@@ -113,7 +113,7 @@ func (as *ActionSuite) Test_CompaniesResource_Edit() {
 	company := &models.Company{}
 	err := as.DB.First(company)
 	as.NoError(err)
-	res := as.HTML("/companies/937af041-43ba-45d0-87a1-6bb173011996").Get()
+	res := as.HTML("/companies/937af041-43ba-45d0-87a1-6bb173011996/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
 	as.Contains(body, "Description for company #1")
