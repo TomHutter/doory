@@ -32,7 +32,6 @@
         </td>
         <td>
           <div class="float-right">
-            <%= linkTo(personPath({ person_id: person.ID }), {class: "btn btn-info", body: "View"}) %>
             <%= linkTo(editPersonPath({ person_id: person.ID }), {class: "btn btn-warning", body: "Edit"}) %>
             <%= linkTo(personPath({ person_id: person.ID }), {class: "btn btn-danger", "data-method": "DELETE", "data-confirm": "Are you sure?", body: "Destroy"}) %>
           </div>
