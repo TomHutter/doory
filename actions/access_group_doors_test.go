@@ -9,14 +9,12 @@ import (
 
 func (as *ActionSuite) Test_AccessGroupDoorsResource_List() {
 	res := as.HTML("/access_group_doors/").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_AccessGroupDoorsResource_Show() {
 	res := as.HTML("/access_group_doors/30f355b5-7395-4bee-befe-1e6336e1cd4e").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 // Method Create is used for creating an destroying AccessGroupDoors
@@ -85,8 +83,7 @@ func (as *ActionSuite) Test_AccessGroupDoorsResource_Update() {
 	access_group_door.DoorID = id
 
 	res := as.HTML("/access_group_doors/%s", access_group_door.ID).Put(access_group_door)
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_AccessGroupDoorsResource_Destroy() {
@@ -98,19 +95,16 @@ func (as *ActionSuite) Test_AccessGroupDoorsResource_Destroy() {
 	as.NotZero(access_group_door.CreatedAt)
 
 	res := as.HTML("/access_group_doors/%s", access_group_door.ID).Delete()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_AccessGroupDoorsResource_New() {
 	res := as.HTML("/access_group_doors/new").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_AccessGroupDoorsResource_Edit() {
 	as.LoadFixture("have some access_group_doors")
 	res := as.HTML("/access_group_doors/1440013e-3c84-4790-8619-8f7b07a24760/edit").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }

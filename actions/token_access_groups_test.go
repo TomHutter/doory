@@ -9,14 +9,12 @@ import (
 
 func (as *ActionSuite) Test_TokenAccessGroupsResource_List() {
 	res := as.HTML("/token_access_groups/").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_TokenAccessGroupsResource_Show() {
 	res := as.HTML("/token_access_groups/30f355b5-7395-4bee-befe-1e6336e1cd4e").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 // Method Create is used for creating an destroying TokenAccessGroups
@@ -93,8 +91,7 @@ func (as *ActionSuite) Test_TokenAccessGroupsResource_Update() {
 	token_access_group.TokenID = id
 
 	res := as.HTML("/access_group_doors/%s", token_access_group.ID).Put(token_access_group)
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_TokenAccessGroupsResource_Destroy() {
@@ -106,19 +103,16 @@ func (as *ActionSuite) Test_TokenAccessGroupsResource_Destroy() {
 	as.NotZero(token_access_group.CreatedAt)
 
 	res := as.HTML("/token_access_groups/%s", token_access_group.ID).Delete()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_TokenAccessGroupsResource_New() {
 	res := as.HTML("/token_access_groups/new").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }
 
 func (as *ActionSuite) Test_TokenAccessGroupsResource_Edit() {
 	as.LoadFixture("have some token_access_groups")
 	res := as.HTML("/token_access_groups/0d2dacdb-e23e-4e9f-b892-f8071ffab038/edit").Get()
-	as.Equal(302, res.Code)
-	as.Equal("/people/", res.Location())
+	as.Equal(404, res.Code)
 }

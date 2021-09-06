@@ -66,9 +66,13 @@ func App() *buffalo.App {
 		p := app.Resource("/people", PeopleResource{})
 		p.Resource("/tokens", TokensResource{})
 		app.Resource("/access_groups", AccessGroupsResource{})
-		
-		app.Resource("/access_group_doors", AccessGroupDoorsResource{})
-		app.Resource("/token_access_groups", TokenAccessGroupsResource{})
+
+		agdr := &AccessGroupDoorsResource{}
+		agd := app.Group("/access_group_doors")
+		agd.POST("/", agdr.Create) // POST /access_group_doors => agdr.Create
+		tagr := &TokenAccessGroupsResource{}
+		tag := app.Group("/token_access_groups")
+		tag.POST("/", tagr.Create)     // POST /token_access_groups => tagr.Create
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
