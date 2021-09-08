@@ -4,5 +4,5 @@
 
 <%= formFor(door, {action: doorsPath(), method: "POST"}) { %>
   <%= partial("doors/form.html") %>
-  <%= linkTo(doorsPath(), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
+  <%= linkTo(getParentPath(crumbs, doorsPath()), {class: "btn btn-warning", "data-confirm": "Are you sure?", body: "Cancel"}) %>
 <% } %>

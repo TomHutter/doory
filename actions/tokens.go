@@ -60,6 +60,9 @@ func (v TokensResource) New(c buffalo.Context) error {
 	}
 
 	c.Set("token", &models.Token{})
+	if err := pushBreadcrumb(c, "New token"); err != nil {
+		return err
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/tokens/new.plush.html"))
 }
@@ -86,6 +89,8 @@ func (v TokensResource) Create(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
+
+	setBreadcrumbs(c)
 
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
@@ -195,6 +200,12 @@ func (v TokensResource) Edit(c buffalo.Context) error {
 		return strings.Join(doorCount, ", ")
 	})
 	c.Set("token", token)
+
+	label := fmt.Sprintf("Token %s", token.TokenID)
+	if err := pushBreadcrumb(c, label); err != nil {
+		return err
+	}
+
 	return c.Render(http.StatusOK, r.HTML("/tokens/edit.plush.html"))
 }
 

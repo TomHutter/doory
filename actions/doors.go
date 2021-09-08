@@ -93,6 +93,9 @@ func (v DoorsResource) New(c buffalo.Context) error {
 	c.Set("door", &models.Door{})
 
 	set_companies(c)
+	if err := pushBreadcrumb(c, "New door"); err != nil {
+		return err
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/doors/new.plush.html"))
 }
@@ -114,7 +117,10 @@ func (v DoorsResource) Create(c buffalo.Context) error {
 		return fmt.Errorf("no transaction found")
 	}
 
-	set_companies(c)
+	if err := set_companies(c); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+	setBreadcrumbs(c)
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(door)
@@ -171,6 +177,14 @@ func (v DoorsResource) Edit(c buffalo.Context) error {
 	c.Set("door", door)
 
 	set_companies(c)
+
+	// Set helper to redirect to previous page
+	//set_referrerPath(c)
+
+	label := fmt.Sprintf("Door %s %s", door.Building, door.Room)
+	if err := pushBreadcrumb(c, label); err != nil {
+		return err
+	}
 
 	return c.Render(http.StatusOK, r.HTML("/doors/edit.plush.html"))
 }

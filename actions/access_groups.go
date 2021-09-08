@@ -94,6 +94,9 @@ func (v AccessGroupsResource) Show(c buffalo.Context) error {
 func (v AccessGroupsResource) New(c buffalo.Context) error {
 	c.Set("accessGroup", &models.AccessGroup{})
 
+	if err := pushBreadcrumb(c, "New access_group"); err != nil {
+		return err
+	}
 	return c.Render(http.StatusOK, r.HTML("/access_groups/new.plush.html"))
 }
 
@@ -119,6 +122,7 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
+	setBreadcrumbs(c)
 
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
@@ -184,6 +188,12 @@ func (v AccessGroupsResource) Edit(c buffalo.Context) error {
 	})
 
 	c.Set("accessGroup", accessGroup)
+
+	label := fmt.Sprintf("AccessGroup %s", accessGroup.Name)
+	if err := pushBreadcrumb(c, label); err != nil {
+		return err
+	}
+
 	return c.Render(http.StatusOK, r.HTML("/access_groups/edit.plush.html"))
 }
 

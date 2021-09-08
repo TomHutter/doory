@@ -9,6 +9,7 @@ import (
 
 	"doors/models"
 
+	"encoding/gob"
 	"github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
 	csrf "github.com/gobuffalo/mw-csrf"
 	i18n "github.com/gobuffalo/mw-i18n"
@@ -75,6 +76,10 @@ func App() *buffalo.App {
 		tag.POST("/", tagr.Create)     // POST /token_access_groups => tagr.Create
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
+
+	// need to register []Breadcrumb{} to avoid
+	// securecookie: error - caused by: securecookie: error - caused by: gob: type not registered for interface: []actions.Breadcrumb
+	gob.Register([]Breadcrumb{})
 
 	return app
 }

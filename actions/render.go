@@ -1,6 +1,10 @@
 package actions
 
 import (
+	"fmt"
+	"html/template"
+	"strings"
+
 	"github.com/gobuffalo/buffalo/render"
 	"github.com/gobuffalo/packr/v2"
 )
@@ -19,6 +23,25 @@ func init() {
 
 		// Add template helpers here:
 		Helpers: render.Helpers{
+			"breadcrumbs": func(b []Breadcrumb) template.HTML {
+				if len(b) == 0 {
+					return template.HTML("")
+				}
+
+				crbs := make([]string, 0)
+				for _, br := range b {
+					crbs = append(crbs, fmt.Sprintf("<a href=\"%s\">%s</a>", br.Path, br.Name))
+				}
+				return template.HTML(strings.Join(crbs, " >> "))
+			},
+			"getParentPath": func(b []Breadcrumb, defaultPath template.HTML) template.HTML {
+				if len(b) < 2 {
+					return template.HTML("/")
+				}
+
+				br := b[len(b)-2]
+				return template.HTML(br.Path)
+			},
 			// for non-bootstrap form helpers uncomment the lines
 			// below and import "github.com/gobuffalo/helpers/forms"
 			// forms.FormKey:     forms.Form,

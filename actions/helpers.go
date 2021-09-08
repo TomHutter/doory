@@ -3,11 +3,12 @@ package actions
 import (
 	"doors/models"
 	"fmt"
+	"html/template"
+	"strings"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gofrs/uuid"
-	"html/template"
-	"strings"
 )
 
 func set_companies(c buffalo.Context) error {
