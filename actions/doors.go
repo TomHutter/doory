@@ -120,7 +120,7 @@ func (v DoorsResource) Create(c buffalo.Context) error {
 	if err := set_companies(c); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
-	setBreadcrumbs(c)
+	getBreadcrumbs(c)
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(door)

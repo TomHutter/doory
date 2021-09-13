@@ -143,6 +143,7 @@ func (as *ActionSuite) Test_PeopleResource_New() {
 
 func (as *ActionSuite) Test_PeopleResource_Edit() {
 	as.LoadFixture("have some people")
+	as.LoadFixture("have some tokens")
 	person := &models.Person{}
 	err := as.DB.First(person)
 	as.NoError(err)
@@ -150,4 +151,7 @@ func (as *ActionSuite) Test_PeopleResource_Edit() {
 	as.Equal(200, res.Code)
 	body := res.Body.String()
 	as.Contains(body, "luke.skywalker@tatooine.com")
+	// Luke should own token aa:aa:aa:aa
+	as.Contains(body, "89:ab:cd:ef")
+	as.Contains(body, "ef:cd:ab:89")
 }

@@ -122,7 +122,7 @@ func (v AccessGroupsResource) Create(c buffalo.Context) error {
 	if err != nil {
 		return err
 	}
-	setBreadcrumbs(c)
+	getBreadcrumbs(c)
 
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
@@ -165,18 +165,18 @@ func (v AccessGroupsResource) Edit(c buffalo.Context) error {
 
 	// Allocate an empty AccessGroup
 	accessGroup := &models.AccessGroup{}
+	doors := &models.Doors{}
+	openingDoors := make(map[uuid.UUID]bool)
 
 	if err := tx.Find(accessGroup, c.Param("access_group_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
 
-	doors := &models.Doors{}
+	c.Set("accessGroup", accessGroup)
 
 	if err := set_doors(c, doors); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
-
-	openingDoors := make(map[uuid.UUID]bool)
 
 	if err := set_opening_doors(c, doors, openingDoors); err != nil {
 		return c.Error(http.StatusNotFound, err)
@@ -186,8 +186,6 @@ func (v AccessGroupsResource) Edit(c buffalo.Context) error {
 	c.Set("formID", func(id uuid.UUID) string {
 		return fmt.Sprintf("door-%s", id.String())
 	})
-
-	c.Set("accessGroup", accessGroup)
 
 	label := fmt.Sprintf("AccessGroup %s", accessGroup.Name)
 	if err := pushBreadcrumb(c, label); err != nil {
@@ -208,6 +206,8 @@ func (v AccessGroupsResource) Update(c buffalo.Context) error {
 
 	// Allocate an empty AccessGroup
 	accessGroup := &models.AccessGroup{}
+	doors := &models.Doors{}
+	openingDoors := make(map[uuid.UUID]bool)
 
 	if err := tx.Find(accessGroup, c.Param("access_group_id")); err != nil {
 		return c.Error(http.StatusNotFound, err)
@@ -223,13 +223,9 @@ func (v AccessGroupsResource) Update(c buffalo.Context) error {
 		return err
 	}
 
-	doors := &models.Doors{}
-
 	if err := set_doors(c, doors); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
-
-	openingDoors := make(map[uuid.UUID]bool)
 
 	if err := set_opening_doors(c, doors, openingDoors); err != nil {
 		return c.Error(http.StatusNotFound, err)

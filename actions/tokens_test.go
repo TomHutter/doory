@@ -2,8 +2,6 @@ package actions
 
 import (
 	"doors/models"
-	"fmt"
-
 	"github.com/gofrs/uuid"
 )
 
@@ -13,7 +11,7 @@ func (as *ActionSuite) Test_TokensResource_List() {
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Get()
 
 	as.Equal(302, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit", res.Location())
 }
 
 func (as *ActionSuite) Test_TokensResource_Show() {
@@ -25,12 +23,12 @@ func (as *ActionSuite) Test_TokensResource_Show() {
 	as.NotZero(token.ID)
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/3eb3735a-4ac1-44fc-9154-46fe073fb394").Get()
 	as.Equal(302, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
-	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d").Get()
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit", res.Location())
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
-	as.Contains(body, "Token#1")
-	as.Contains(body, "Token#2")
+	as.Contains(body, "89:ab:cd:ef")
+	as.Contains(body, "ab:cd:ef:01")
 }
 
 func (as *ActionSuite) Test_TokensResource_Create() {
@@ -40,11 +38,16 @@ func (as *ActionSuite) Test_TokensResource_Create() {
 	token := &models.Token{
 		ID:       id,
 		PersonID: pID,
-		TokenID:  "abcdef",
+		TokenID:  "aa:bb:cc:dd",
 	}
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
+	// build up some bread crumbs before doing the post
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit/").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/new").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(303, res.Code)
-	as.Equal(fmt.Sprintf("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s/edit/", token.ID), res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit/", res.Location())
 
 	err := as.DB.First(token)
 	as.NoError(err)
@@ -76,11 +79,16 @@ func (as *ActionSuite) Test_TokensResource_Create_Duplicates() {
 	token := &models.Token{
 		ID:       id,
 		PersonID: pID,
-		TokenID:  "abcdef",
+		TokenID:  "aa:bb:cc:dd",
 	}
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
+	// build up some bread crumbs before doing the post
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/new").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(303, res.Code)
-	as.Equal(fmt.Sprintf("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s/edit/", token.ID), res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit", res.Location())
 
 	err := as.DB.First(token)
 	as.NoError(err)
@@ -91,11 +99,11 @@ func (as *ActionSuite) Test_TokensResource_Create_Duplicates() {
 	token = &models.Token{
 		ID:       id,
 		PersonID: pID,
-		TokenID:  "ABCDEF",
+		TokenID:  "AA:BB:CC:DD",
 	}
 	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/").Post(token)
 	as.Equal(422, res.Code)
-	as.Contains(res.Body.String(), "TokenID \"ABCDEF\" is already in use")
+	as.Contains(res.Body.String(), "TokenID \"AA:BB:CC:DD\" is already in use")
 }
 
 func (as *ActionSuite) Test_TokensResource_Update() {
@@ -107,15 +115,22 @@ func (as *ActionSuite) Test_TokensResource_Update() {
 	as.NotZero(token.ID)
 	as.NotZero(token.CreatedAt)
 
-	token.TokenID = "99999999"
+	token.TokenID = "99:99:99:99"
 
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s", token.ID).Put(token)
+	// build up some bread crumbs before doing the post
+	res := as.HTML("/people/").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s/edit", token.ID).Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/%s", token.ID).Put(token)
 	as.Equal(303, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit", res.Location())
 
 	err = as.DB.Reload(token)
 	as.NoError(err)
-	as.Equal("99999999", token.TokenID)
+	as.Equal("99:99:99:99", token.TokenID)
 }
 
 func (as *ActionSuite) Test_TokensResource_Destroy() {
@@ -126,9 +141,12 @@ func (as *ActionSuite) Test_TokensResource_Destroy() {
 	as.NoError(err)
 	as.NotZero(token.ID)
 	as.NotZero(token.CreatedAt)
-	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/3eb3735a-4ac1-44fc-9154-46fe073fb394/").Delete()
+	// build up some bread crumbs before doing the post
+	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit/").Get()
+	as.Equal(200, res.Code)
+	res = as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/tokens/3eb3735a-4ac1-44fc-9154-46fe073fb394/").Delete()
 	as.Equal(303, res.Code)
-	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d", res.Location())
+	as.Equal("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit/", res.Location())
 	count, err := as.DB.Count(&models.Tokens{})
 	as.NoError(err)
 	as.Equal(3, count)
@@ -151,5 +169,5 @@ func (as *ActionSuite) Test_TokensResource_Edit() {
 	res := as.HTML("/people/bd42798a-77cb-440c-9595-ec166fd3c32d/edit").Get()
 	as.Equal(200, res.Code)
 	body := res.Body.String()
-	as.Contains(body, "Token#1")
+	as.Contains(body, "89:ab:cd:ef")
 }

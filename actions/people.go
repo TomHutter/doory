@@ -154,7 +154,7 @@ func (v PeopleResource) Create(c buffalo.Context) error {
 	if err := set_companies(c); err != nil {
 		return c.Error(http.StatusNotFound, err)
 	}
-	setBreadcrumbs(c)
+	getBreadcrumbs(c)
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(person)
@@ -220,6 +220,7 @@ func (v PeopleResource) Edit(c buffalo.Context) error {
 
 	// Set helper for checkbox active and alarm
 	set_person_helpers(c)
+	set_reverse_token(c)
 
 	label := fmt.Sprintf("Person %s %s", person.Name, person.Surname)
 	if err := pushBreadcrumb(c, label); err != nil {

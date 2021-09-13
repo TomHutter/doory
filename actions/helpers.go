@@ -62,6 +62,18 @@ func set_person_tokens(c buffalo.Context, person *models.Person) error {
 	return nil
 }
 
+// Set helper to show reverted token
+func set_reverse_token(c buffalo.Context) error {
+	c.Set("reverseToken", func(token string) string {
+		parts := strings.Split(token, ":")
+		for i, j := 0, len(parts)-1; i < j; i, j = i+1, j-1 {
+			parts[i], parts[j] = parts[j], parts[i]
+		}
+		return strings.Join(parts, ":")
+	})
+	return nil
+}
+
 func set_person(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)

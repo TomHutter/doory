@@ -34,8 +34,9 @@ type TokensResource struct {
 func (v TokensResource) List(c buffalo.Context) error {
 	c.Flash().Add("warning", "List not implemented")
 
+	set_reverse_token(c)
 	if c.Param("person_id") != "" {
-		return c.Redirect(302, "/people/%s", c.Param("person_id"))
+		return c.Redirect(302, "/people/%s/edit", c.Param("person_id"))
 	}
 	return c.Redirect(302, "/people/")
 }
@@ -45,8 +46,9 @@ func (v TokensResource) List(c buffalo.Context) error {
 func (v TokensResource) Show(c buffalo.Context) error {
 	c.Flash().Add("warning", "Show not implemented")
 
+	set_reverse_token(c)
 	if c.Param("person_id") != "" {
-		return c.Redirect(302, "/people/%s", c.Param("person_id"))
+		return c.Redirect(302, "/people/%s/edit", c.Param("person_id"))
 	}
 	return c.Redirect(302, "/people/")
 }
@@ -90,8 +92,6 @@ func (v TokensResource) Create(c buffalo.Context) error {
 		return err
 	}
 
-	setBreadcrumbs(c)
-
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
 			// Make the errors available inside the html template
@@ -106,6 +106,7 @@ func (v TokensResource) Create(c buffalo.Context) error {
 				return c.Error(http.StatusNotFound, err)
 			}
 
+			getBreadcrumbs(c)
 			return c.Render(http.StatusUnprocessableEntity, r.HTML("/tokens/new.plush.html"))
 		}).Wants("json", func(c buffalo.Context) error {
 			return c.Render(http.StatusUnprocessableEntity, r.JSON(verrs))
@@ -114,12 +115,13 @@ func (v TokensResource) Create(c buffalo.Context) error {
 		}).Respond(c)
 	}
 
+	//popBreadcrumb(c)
 	return responder.Wants("html", func(c buffalo.Context) error {
 		// If there are no errors set a success message
 		c.Flash().Add("success", T.Translate(c, "token.created.success"))
 
-		// and redirect to the show page
-		return c.Redirect(http.StatusSeeOther, "/people/%v/tokens/%v/edit/", c.Param("person_id"), token.ID)
+		// and redirect to the previos page
+		return c.Redirect(http.StatusSeeOther, getParentPath(c, fmt.Sprintf("/tokens/%v/edit/", token.ID)))
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusCreated, r.JSON(token))
 	}).Wants("xml", func(c buffalo.Context) error {
@@ -206,6 +208,7 @@ func (v TokensResource) Edit(c buffalo.Context) error {
 		return err
 	}
 
+	set_reverse_token(c)
 	return c.Render(http.StatusOK, r.HTML("/tokens/edit.plush.html"))
 }
 
@@ -235,6 +238,61 @@ func (v TokensResource) Update(c buffalo.Context) error {
 		return err
 	}
 
+	getBreadcrumbs(c)
+
+	accessGroups := &models.AccessGroups{}
+
+	if err := set_access_groups(c, accessGroups); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	// Check box if tokenAccessGroup token, accessGroup exists
+	c.Set("tokenAccessGroupHelper", func(token *models.Token, accessGroup models.AccessGroup) string {
+		tokenAccessGroup := &models.TokenAccessGroup{}
+		if err := tx.Where("token_id = ? and access_group_id = ?", token.ID, accessGroup.ID).First(tokenAccessGroup); err != nil {
+			return ""
+		} else {
+			return "checked=\"\""
+		}
+	})
+
+	// Set helper for form IDs
+	c.Set("formID", func(id uuid.UUID) string {
+		return fmt.Sprintf("access-group-%s", id.String())
+	})
+
+	usedAccessGroups := make(map[uuid.UUID]bool)
+
+	if err := set_used_access_groups(c, accessGroups, usedAccessGroups); err != nil {
+		return c.Error(http.StatusNotFound, err)
+	}
+
+	//if err := set_access_groups(c, token); err != nil {
+	//	return c.Error(http.StatusNotFound, err)
+	//}
+
+	// Show number of accessable doors
+	c.Set("doorsCount", func(access_group models.AccessGroup) string {
+
+		// Allocate an empty AccessGroup
+		accessGroupDoors := &models.AccessGroupDoors{}
+
+		if err := tx.Eager().Where("access_group_id = ?", access_group.ID.String()).All(accessGroupDoors); err != nil {
+			//if err := tx.Q().GroupBy("building").Where("accessGroup, c.Param("access_group_id")); err != nil {
+			return c.Error(http.StatusNotFound, err).Error()
+		}
+		list := make(map[string]int)
+		for _, agd := range *accessGroupDoors {
+			list[agd.Door.Building] += 1
+		}
+		doorCount := make([]string, 0)
+		for building, count := range list {
+			doorCount = append(doorCount, fmt.Sprintf("%s: %d", building, count))
+		}
+		return strings.Join(doorCount, ", ")
+	})
+	c.Set("token", token)
+
 	if verrs.HasAny() {
 		return responder.Wants("html", func(c buffalo.Context) error {
 			// Make the errors available inside the html template
@@ -243,6 +301,11 @@ func (v TokensResource) Update(c buffalo.Context) error {
 			// Render again the edit.html template that the user can
 			// correct the input.
 			c.Set("token", token)
+
+			// To find the Person the parameter person_id is used.
+			if err := set_person(c); err != nil {
+				return c.Error(http.StatusNotFound, err)
+			}
 
 			return c.Render(http.StatusUnprocessableEntity, r.HTML("/tokens/edit.plush.html"))
 		}).Wants("json", func(c buffalo.Context) error {
@@ -256,12 +319,8 @@ func (v TokensResource) Update(c buffalo.Context) error {
 		// If there are no errors set a success message
 		c.Flash().Add("success", T.Translate(c, "token.updated.success"))
 
-		// and redirect to the show page
-		if c.Param("Redirect") == "index" {
-			return c.Redirect(http.StatusSeeOther, "/people/")
-		} else {
-			return c.Redirect(http.StatusSeeOther, "/people/%v", c.Param("person_id"))
-		}
+		// and redirect to the previous page
+		return c.Redirect(http.StatusSeeOther, getParentPath(c, fmt.Sprintf("/tokens/%v/edit/", token.ID)))
 
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusOK, r.JSON(token))
@@ -306,8 +365,10 @@ func (v TokensResource) Destroy(c buffalo.Context) error {
 		// If there are no errors set a flash message
 		c.Flash().Add("success", T.Translate(c, "token.destroyed.success"))
 
-		// Redirect to the index page
-		return c.Redirect(http.StatusSeeOther, "/people/%v", c.Param("person_id"))
+		br := getBreadcrumbs(c)
+
+		// Redirect to the previous page
+		return c.Redirect(http.StatusSeeOther, br[len(br)-1].Path)
 	}).Wants("json", func(c buffalo.Context) error {
 		return c.Render(http.StatusOK, r.JSON(token))
 	}).Wants("xml", func(c buffalo.Context) error {

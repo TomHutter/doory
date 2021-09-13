@@ -45,7 +45,7 @@ func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	var count int
 	var err error
 
-	count, err = tx.Where("UPPER(token_id) = UPPER(?)", t.TokenID).Count(token)
+	count, err = tx.Where("UPPER(token_id) = UPPER(?) and id != ?", t.TokenID, t.ID).Count(token)
 	if err != nil {
 		errors := validate.NewErrors()
 		errors.Add("token_id", "error during db lookup tokens-TokenID")
@@ -63,6 +63,8 @@ func (t *Token) Validate(tx *pop.Connection) (*validate.Errors, error) {
 
 	return validate.Validate(
 		&validators.StringIsPresent{Field: t.TokenID, Name: "TokenID"},
+		&validators.RegexMatch{Field: t.TokenID, Expr: "^[a-fA-F0-9:]+$", Name: "TokenID", Message: "Allowed caracters [a-fA-F:]."},
+		&validators.RegexMatch{Field: t.TokenID, Expr: "^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$", Name: "TokenID", Message: "Valid token form is aa:bb:cc:dd."},
 	), nil
 }
 
