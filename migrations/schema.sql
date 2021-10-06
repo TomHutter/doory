@@ -45,6 +45,20 @@ CREATE TABLE IF NOT EXISTS "access_groups" (
 "created_at" DATETIME NOT NULL,
 "updated_at" DATETIME NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "tokens_access_groups" (
+"id" TEXT PRIMARY KEY,
+"token_id" char(36) NOT NULL,
+"access_group_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "access_groups_doors" (
+"id" TEXT PRIMARY KEY,
+"access_group_id" char(36) NOT NULL,
+"door_id" char(36) NOT NULL,
+"created_at" DATETIME NOT NULL,
+"updated_at" DATETIME NOT NULL
+);
 CREATE TABLE IF NOT EXISTS "access_group_doors" (
 "id" TEXT PRIMARY KEY,
 "access_group_id" char(36) NOT NULL,

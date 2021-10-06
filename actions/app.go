@@ -10,10 +10,13 @@ import (
 	"doors/models"
 
 	"encoding/gob"
+
 	"github.com/gobuffalo/buffalo-pop/v2/pop/popmw"
 	csrf "github.com/gobuffalo/mw-csrf"
 	i18n "github.com/gobuffalo/mw-i18n"
 	"github.com/gobuffalo/packr/v2"
+
+	"github.com/markbates/goth/gothic"
 )
 
 // ENV is used to help switch settings based on where the
@@ -73,7 +76,16 @@ func App() *buffalo.App {
 		agd.POST("/", agdr.Create) // POST /access_group_doors => agdr.Create
 		tagr := &TokenAccessGroupsResource{}
 		tag := app.Group("/token_access_groups")
-		tag.POST("/", tagr.Create)     // POST /token_access_groups => tagr.Create
+		tag.POST("/", tagr.Create) // POST /token_access_groups => tagr.Create
+		auth := app.Group("/auth")
+		app.Use(SetCurrentUser)
+		app.Use(Authorize)
+		app.Middleware.Skip(Authorize, HomeHandler)
+		bah := buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)
+		auth.GET("/{provider}", bah)
+		auth.DELETE("", AuthDestroy)
+		auth.Middleware.Skip(Authorize, bah, AuthCallback)
+		auth.GET("/{provider}/callback", AuthCallback)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 

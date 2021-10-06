@@ -3,11 +3,12 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
-	"time"
 )
 
 // Person is used by pop to map your people database table to your go code.

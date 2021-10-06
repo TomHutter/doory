@@ -1,12 +1,12 @@
 ---
 development:
   dialect: "sqlite3"
-  database: /workspaces/buffalo/doors/doors_development.sqlite
+  database: /home/nka/Projects/work/dev/doory/doors_development.sqlite
 
 test:
   dialect: "sqlite3"
-  database: /workspaces/buffalo/doors/doors_test.sqlite
+  database: /home/nka/Projects/work/dev/doory/doors_test.sqlite
 
 production:
   dialect: "sqlite3"
-  database: /workspaces/buffalo/doors/doors_production.sqlite
+  database: /home/nka/Projects/work/dev/doory/doors_production.sqlite

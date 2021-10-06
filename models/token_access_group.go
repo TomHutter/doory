@@ -2,18 +2,20 @@ package models
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/validate"
 	"github.com/gofrs/uuid"
-	"time"
 )
+
 // TokenAccessGroup is used by pop to map your .model.Name.Proper.Pluralize.Underscore database table to your go code.
 type TokenAccessGroup struct {
-    ID uuid.UUID `json:"id" db:"id"`
-    TokenID uuid.UUID `json:"token_id" db:"token_id"`
-    AccessGroupID uuid.UUID `json:"access_group_id" db:"access_group_id"`
-    CreatedAt time.Time `json:"created_at" db:"created_at"`
-    UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID            uuid.UUID `json:"id" db:"id"`
+	TokenID       uuid.UUID `json:"token_id" db:"token_id"`
+	AccessGroupID uuid.UUID `json:"access_group_id" db:"access_group_id"`
+	CreatedAt     time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted

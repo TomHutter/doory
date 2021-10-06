@@ -2,11 +2,12 @@ package models
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/gobuffalo/pop/v5"
 	"github.com/gobuffalo/validate/v3"
 	"github.com/gobuffalo/validate/v3/validators"
 	"github.com/gofrs/uuid"
-	"time"
 )
 
 // AccessGroupDoor is used by pop to map your .model.Name.Proper.Pluralize.Underscore database table to your go code.
