@@ -2,6 +2,7 @@ package actions
 
 import (
 	"github.com/gobuffalo/buffalo"
+	//"github.com/gobuffalo/buffalo-goth/goth"
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
@@ -62,7 +63,9 @@ func App() *buffalo.App {
 
 		// Setup and use translations:
 		app.Use(translations())
-
+		app.Use(Authorize())
+		app.Use(SetCurrentUser())
+		app.Middleware.Skip(Authorize(), HomeHandler)
 		app.GET("/", HomeHandler)
 
 		app.Resource("/doors", DoorsResource{})
@@ -78,13 +81,10 @@ func App() *buffalo.App {
 		tag := app.Group("/token_access_groups")
 		tag.POST("/", tagr.Create) // POST /token_access_groups => tagr.Create
 		auth := app.Group("/auth")
-		app.Use(SetCurrentUser)
-		app.Use(Authorize)
-		app.Middleware.Skip(Authorize, HomeHandler)
 		bah := buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)
+		auth.GET("", AuthDestroy())
+		auth.Middleware.Skip(Authorize(), bah, AuthCallback)
 		auth.GET("/{provider}", bah)
-		auth.DELETE("", AuthDestroy)
-		auth.Middleware.Skip(Authorize, bah, AuthCallback)
 		auth.GET("/{provider}/callback", AuthCallback)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
@@ -92,6 +92,8 @@ func App() *buffalo.App {
 	// need to register []Breadcrumb{} to avoid
 	// securecookie: error - caused by: securecookie: error - caused by: gob: type not registered for interface: []actions.Breadcrumb
 	gob.Register([]Breadcrumb{})
+	gob.Register(make(map[string]interface{}))
+	gob.Register(models.User{})
 
 	return app
 }

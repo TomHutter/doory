@@ -5,7 +5,12 @@
         <a href="<%= rootPath() %>"><img src="<%= rootPath() %>assets/images/logo.svg" alt=""></a>
       </div>
       <div class="col-md-9 col-sm-9 col-xs-10 titles">
-        <h1><%= t("welcome_greeting") %></h1>
+        <h1>
+          <%= t("welcome_greeting") %>
+          <%= if (current_user) { %>
+            ,<%= current_user.Name } %>
+          <% } %>
+          </h1>
         <h2>
           <a href="https://github.com/gobuffalo/buffalo"><i class="fab fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
         </h2>
@@ -15,50 +20,55 @@
       </div>
     </div>
   </div>
-
 </header>
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="subtitle">
-      <div class="container">
-        <h3>Defined Routes</h3>
+<%= if (current_user) { %>
+  <a href="/auth">Logout</a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="subtitle">
+        <div class="container">
+          <h3>Defined Routes</h3>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr text-align="left">
+              <th class="centered">METHOD</th>
+              <th>PATH</th>
+              <th>NAME</th>
+              <th>HANDLER</th>
+            </tr>
+          </thead>
+          <tbody>
+  
+            <%= for (r) in routes { %>
+              <tr>
+                <td class="centered">
+                  <%= r.Method %>
+                </td>
+                <td>
+                  <%= if (r.Method != "GET" || r.Path ~= "{") {
+                    return r.Path
+                  } else {
+                    return linkTo(r.Path, {body: r.Path})
+                  } %>
+                </td>
+                <td>
+                  <%= r.PathName %>
+                </td>
+                <td><code><%= r.HandlerName %></code></td>
+              </tr>
+            <% } %>
+  
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr text-align="left">
-            <th class="centered">METHOD</th>
-            <th>PATH</th>
-            <th>NAME</th>
-            <th>HANDLER</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <%= for (r) in routes { %>
-            <tr>
-              <td class="centered">
-                <%= r.Method %>
-              </td>
-              <td>
-                <%= if (r.Method != "GET" || r.Path ~= "{") {
-                  return r.Path
-                } else {
-                  return linkTo(r.Path, {body: r.Path})
-                } %>
-              </td>
-              <td>
-                <%= r.PathName %>
-              </td>
-              <td><code><%= r.HandlerName %></code></td>
-            </tr>
-          <% } %>
-
-        </tbody>
-      </table>
-    </div>
   </div>
-</div>
+<% } else { %>
+  <a href="/auth/azureadv2" class="button" >Please Sign in</a>
+<% } %>
+
+
 <div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span> </div>
