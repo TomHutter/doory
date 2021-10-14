@@ -30,6 +30,7 @@ func init() {
 				Scopes: []azureadv2.ScopeType{
 					azureadv2.AgreementReadAllScope,
 				},
+				Tenant: azureadv2.OrganizationsTenant,
 			},
 		),
 	)
