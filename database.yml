@@ -9,4 +9,4 @@ test:
 
 production:
   dialect: "sqlite3"
-  database: /home/nka/Projects/work/dev/doory/doors_production.sqlite
+  database: /var/doors_prod.sqlite

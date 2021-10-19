@@ -3,19 +3,35 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <title>Buffalo - Doors</title>
+    <title>Doory</title>
     <%= stylesheetTag("application.css") %>
     <meta name="csrf-param" content="authenticity_token" />
     <meta name="csrf-token" content="<%= authenticity_token %>" />
     <link rel="icon" href="<%= assetPath("images/favicon.ico") %>">
   </head>
   <body>
-
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Doory</a>
+        </div>
+        <a class="btn btn-default navbar-btn" href="/access_groups" >Access Groups</a>
+        <a class="btn btn-default navbar-btn" href="/companies" >Companies</a>
+        <a class="btn btn-default navbar-btn" href="/doors" >Doors</a>
+        <a class="btn btn-default navbar-btn" href="/people" >People</a>
+        <%= if (current_user) { %>
+          <a class="btn btn-default navbar-btn" href="/auth">
+            Signed in as <%= current_user.Name %> | Logout
+          </a>
+        <% } else { %>
+          <a class="btn btn-default navbar-btn" href="/auth/azureadv2">Please sign in</a>
+        <% } %>
+      </div>
+    </nav>
     <div class="container">
       <%= if (crumbs) { %>
           <%= breadcrumbs(crumbs) %>
       <% } %>
-      
       <%= partial("flash.html") %>
       <%= yield %>
     </div>

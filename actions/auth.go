@@ -4,6 +4,7 @@ import (
 	"doors/models"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"os"
 
@@ -19,13 +20,27 @@ import (
 )
 
 func init() {
-	gothic.Store = App().SessionStore
+	var host string
 
+	switch appHost := App().Host; strings.ContainsAny(appHost, "127.0.0.1") {
+	case true:
+		splits := strings.Split(appHost, ":")
+		fmt.Println(splits)
+		host = fmt.Sprintf("%s://localhost:%s", splits[0], splits[2])
+	default:
+		host = appHost
+	}
+
+	gothic.Store = App().SessionStore
 	goth.UseProviders(
 		azureadv2.New(
 			os.Getenv("AZURE_KEY"),
 			os.Getenv("AZURE_SECRET"),
-			fmt.Sprintf("%s%s", App().Host, "/auth/azureadv2/callback"),
+			fmt.Sprintf(
+				"%s%s",
+				host,
+				"/auth/azureadv2/callback",
+			),
 			azureadv2.ProviderOptions{
 				Scopes: []azureadv2.ScopeType{
 					azureadv2.AgreementReadAllScope,
