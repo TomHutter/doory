@@ -36,6 +36,7 @@ func init() {
 	)
 }
 
+// AuthCallback handler for OAuth2 procedure
 func AuthCallback(c buffalo.Context) error {
 	user, err := gothic.CompleteUserAuth(c.Response(), c.Request())
 	if err != nil {
@@ -51,18 +52,18 @@ func AuthCallback(c buffalo.Context) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	model_user := &models.User{
+	modelUser := &models.User{
 		Name:       user.Name,
 		Email:      nulls.NewString(user.Email),
 		Provider:   user.Provider,
 		ProviderID: user.UserID,
 	}
 	if exists {
-		if err := tx.First(model_user); err != nil {
+		if err := tx.First(modelUser); err != nil {
 			return errors.WithStack(err)
 		}
 	} else {
-		if err := tx.Save(model_user); err != nil {
+		if err := tx.Save(modelUser); err != nil {
 			return errors.WithStack(
 				fmt.Errorf(
 					"could not create new user %s: %s",
@@ -72,7 +73,7 @@ func AuthCallback(c buffalo.Context) error {
 			)
 		}
 	}
-	c.Session().Set("current_user_id", model_user.ID)
+	c.Session().Set("current_user_id", modelUser.ID)
 	if c.Session().Save() != nil {
 		return errors.WithStack(err)
 	}
@@ -83,6 +84,7 @@ func AuthCallback(c buffalo.Context) error {
 	)
 }
 
+// SetCurrentUser sets the current user into the context
 func SetCurrentUser() buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
@@ -92,12 +94,12 @@ func SetCurrentUser() buffalo.MiddlewareFunc {
 					fmt.Errorf("no transaction found"),
 				)
 			}
-			session_user_id := c.Session().Get("current_user_id")
-			if session_user_id == nil {
+			sessionUserID := c.Session().Get("current_user_id")
+			if sessionUserID == nil {
 				return next(c)
 			}
 			user := &models.User{}
-			if err := tx.Find(user, session_user_id); err != nil {
+			if err := tx.Find(user, sessionUserID); err != nil {
 				return errors.WithStack(err)
 			}
 			c.Set("current_user", user)
@@ -106,6 +108,7 @@ func SetCurrentUser() buffalo.MiddlewareFunc {
 	}
 }
 
+// Authorize blocks non-authorized endpoints
 func Authorize() buffalo.MiddlewareFunc {
 	return func(next buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
@@ -120,7 +123,7 @@ func Authorize() buffalo.MiddlewareFunc {
 	}
 }
 
-// Log out the user
+// AuthDestroy logs out the user
 func AuthDestroy() buffalo.Handler {
 	return func(c buffalo.Context) error {
 		if err := gothic.Logout(c.Response(), c.Request()); err != nil {
