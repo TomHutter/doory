@@ -1,5 +1,5 @@
-name = "doors"
-bin = "bin/doors"
+name = "doory"
+bin = "bin/doory"
 vcs = "git"
 with_pop = true
 with_sqlite = true

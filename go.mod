@@ -1,4 +1,4 @@
-module doors
+module doory
 
 go 1.16
 

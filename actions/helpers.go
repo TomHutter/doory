@@ -1,7 +1,7 @@
 package actions
 
 import (
-	"doors/models"
+	"doory/models"
 	"fmt"
 	"html/template"
 	"strings"

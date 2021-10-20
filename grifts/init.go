@@ -1,7 +1,7 @@
 package grifts
 
 import (
-	"doors/actions"
+	"doory/actions"
 
 	"github.com/gobuffalo/buffalo"
 )

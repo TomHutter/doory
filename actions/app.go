@@ -8,7 +8,7 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
 
-	"doors/models"
+	"doory/models"
 
 	"encoding/gob"
 
