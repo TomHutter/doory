@@ -1,0 +1,16 @@
+# Setting database files with no absolute path
+# you have to be in the current folder to start doory.
+# This works as well for docker container,
+# as the workdir in the container get's set during build.
+---
+development:
+  dialect: "sqlite3"
+  database: doory_development.sqlite
+
+test:
+  dialect: "sqlite3"
+  database: doory_test.sqlite
+
+production:
+  dialect: "sqlite3"
+  database: doory_prod.sqlite

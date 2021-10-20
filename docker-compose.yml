@@ -1,0 +1,11 @@
+version: '3'
+services:
+  doory:
+    build:
+      context: .
+    image: doory:latest
+    volumes:
+    - $PWD:/src/doory
+    - $PWD/database.yml.docker:/src/doory/database.yml
+    ports:
+    - 3000:3000

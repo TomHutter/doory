@@ -5,8 +5,8 @@ FROM gobuffalo/buffalo:v0.16.26 as builder
 ENV GO111MODULE on
 ENV GOPROXY http://proxy.golang.org
 
-RUN mkdir -p /src/doors
-WORKDIR /src/doors
+RUN mkdir -p /src/doory
+WORKDIR /src/doory
 
 # this will cache the npm install step, unless package.json changes
 ADD package.json .
@@ -19,6 +19,9 @@ COPY go.sum go.sum
 # and so that source changes don't invalidate our downloaded layer
 RUN go mod download
 
+RUN GO111MODULE=on go get -u -v -tags sqlite github.com/gobuffalo/buffalo \
+    && go install -tags sqlite github.com/gobuffalo/cli/cmd/buffalo@latest
+
 ADD . .
 RUN buffalo build --static -o /bin/app
 
@@ -26,9 +29,10 @@ FROM alpine
 RUN apk add --no-cache bash
 RUN apk add --no-cache ca-certificates
 
-WORKDIR /bin/
+RUN mkdir -p /src/doory
+WORKDIR /src/doory
 
-COPY --from=builder /bin/app .
+COPY --from=builder /bin/app /bin/app
 
 # Uncomment to run the binary in "production" mode:
 # ENV GO_ENV=production
@@ -37,6 +41,7 @@ COPY --from=builder /bin/app .
 ENV ADDR=0.0.0.0
 ENV AZURE_KEY=""
 ENV AZURE_SECRET=""
+ENV GO_ENV=development
 
 EXPOSE 3000
 
