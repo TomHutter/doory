@@ -77,3 +77,12 @@ func (t *Token) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 func (t *Token) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
+
+func (t *Token) Reverse() string {
+	var reversed string
+	chars := []rune(t.TokenID)
+	for i := len(chars); i != 0; i-- {
+		//TODO
+	}
+	return reversed
+}

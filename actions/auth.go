@@ -22,13 +22,12 @@ import (
 func init() {
 	var host string
 
-	switch appHost := App().Host; strings.ContainsAny(appHost, "127.0.0.1") {
-	case true:
-		splits := strings.Split(appHost, ":")
-		fmt.Println(splits)
+	if strings.Contains(App().Host, "127.0.0.1") {
+		splits := strings.Split(App().Host, ":")
+		fmt.Println(App().Host, splits)
 		host = fmt.Sprintf("%s://localhost:%s", splits[0], splits[2])
-	default:
-		host = appHost
+	} else {
+		host = App().Host
 	}
 
 	gothic.Store = App().SessionStore

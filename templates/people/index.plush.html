@@ -15,7 +15,7 @@
   <tbody>
     <%= for (person) in people { %>
       <tr 
-        <%= if (person.IsActive) { %>
+        <%= if (!person.IsActive) { %>
           style="background-color: #E9ECEF;"
         <% } %>
       >

@@ -23,6 +23,7 @@ import (
 // ENV is used to help switch settings based on where the
 // application is being run. Default is "development".
 var ENV = envy.Get("GO_ENV", "development")
+var host = envy.Get("HOST", "https://localhost:3000")
 var app *buffalo.App
 var T *i18n.Translator
 
@@ -44,8 +45,8 @@ func App() *buffalo.App {
 		app = buffalo.New(buffalo.Options{
 			Env:         ENV,
 			SessionName: "_doors_session",
+			Host:        host,
 		})
-
 		// Automatically redirect to SSL
 		app.Use(forceSSL())
 
