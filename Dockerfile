@@ -23,7 +23,7 @@ ADD . .
 RUN buffalo build --static -o /bin/app
 
 FROM alpine
-RUN apk add --no-cache bash sqlite3
+RUN apk add --no-cache bash sqlite
 RUN apk add --no-cache ca-certificates
 
 WORKDIR /bin/
